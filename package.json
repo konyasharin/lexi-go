@@ -7,16 +7,11 @@
     "lint": "turbo run lint",
     "fix": "turbo run fix",
     "check-types": "turbo run check-types",
-    "prepare": "pnpm exec husky install"
-  },
-  "lint-staged": {
-    "{packages/components,apps/web}/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix --max-warnings=0"
-    ]
+    "prepare": "pnpm exec husky install",
+    "lint-staged": "turbo run lint-staged"
   },
   "devDependencies": {
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
     "turbo": "^2.5.4",
     "typescript": "5.8.3"

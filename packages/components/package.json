@@ -9,7 +9,14 @@
     "lint": "eslint . --max-warnings 0",
     "fix": "eslint . --fix",
     "generate:component": "turbo gen react-component",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit --pretty",
+    "lint-staged": "pnpm run check-types && pnpm exec lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "eslint --max-warnings 0"
+    ]
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -18,6 +25,7 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.31.0",
+    "lint-staged": "^16.1.2",
     "typescript": "5.8.2"
   },
   "dependencies": {
