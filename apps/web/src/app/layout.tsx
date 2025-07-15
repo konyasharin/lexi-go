@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Container } from "@chakra-ui/react";
 import { ThemeProvider } from "@repo/components/chakra";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ThemeProvider defaultTheme={"dark"}>{children}</ThemeProvider>
+        <ThemeProvider defaultTheme={"dark"}>
+          <Container>{children}</Container>
+        </ThemeProvider>
       </body>
     </html>
   );

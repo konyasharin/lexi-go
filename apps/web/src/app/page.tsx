@@ -1,7 +1,5 @@
-import {Button} from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 
 export default function Home() {
-  return (
-      <Button>123</Button>
-  );
+  return <Button>123</Button>;
 }
