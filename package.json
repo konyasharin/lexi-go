@@ -10,8 +10,8 @@
     "prepare": "pnpm exec husky install"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "bash -c 'if [ -f $(dirname \"$1\")/package.json ]; then eslint --fix --max-warnings=0 \"$1\"; else exit 0; fi' --"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix --max-warnings=0 --no-error-on-unmatched-pattern"
     ]
   },
   "devDependencies": {
