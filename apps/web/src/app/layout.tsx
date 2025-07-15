@@ -1,9 +1,7 @@
 import { ReactNode } from "react";
-import { ThemeProvider } from "@repo/components/ui";
+import { ThemeProvider } from "@repo/components/chakra";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-
-import "./globals.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,11 +23,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable}`}
-        suppressHydrationWarning
-      >
+    <html lang="ru" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme={"dark"}>{children}</ThemeProvider>
       </body>
     </html>
