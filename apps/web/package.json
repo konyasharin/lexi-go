@@ -8,13 +8,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
+    "fix": "next lint --fix",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
+    "@chakra-ui/react": "^3.22.0",
+    "@emotion/react": "^11.14.0",
+    "@repo/components": "workspace:*",
     "next": "^15.3.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
