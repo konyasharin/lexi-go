@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
-import { Container } from '@chakra-ui/react';
-import { ThemeProvider } from '@repo/components/chakra';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+
+import './globals.css';
+import {Header} from "@repo/components/widgets";
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -26,9 +27,9 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ThemeProvider defaultTheme={'dark'}>
-          <Container>{children}</Container>
-        </ThemeProvider>
+        <Header className={'text-6xl'} />
+        <div className={'bg-black text-white text-4xl'}>123</div>
+        {children}
       </body>
     </html>
   );

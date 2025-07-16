@@ -3,26 +3,32 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./chakra": "./src/chakra/index.ts"
+    "./styles": "./dist/index.css",
+    "./widgets": "./dist/widgets/index.js"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "fix": "eslint . --fix",
-    "generate:component": "turbo gen react-component",
-    "check-types": "tsc --noEmit --pretty"
+    "check-types": "tsc --noEmit --pretty",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
+    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "dev:components": "tsc --watch",
+    "build:components": "tsc"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/cli": "^4.1.11",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.31.0",
+    "tailwindcss": "^4.1.11",
     "typescript": "5.8.2"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.22.0",
-    "@emotion/react": "^11.14.0",
+    "clsx": "^2.1.1",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
