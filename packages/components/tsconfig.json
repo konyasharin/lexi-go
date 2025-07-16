@@ -7,9 +7,9 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "baseUrl": "./src",
-    "rootDir": "./src",
     "paths": {
-      "@widgets/*": ["widgets/*"]
+      "@widgets/*": ["widgets/*"],
+      "@shadcn*": ["shadcn/*"]
     }
   },
   "include": ["src"],
