@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import * as React from 'react'
 import { LuMoon, LuSun } from 'react-icons/lu';
 import type { IconButtonProps, SpanProps } from '@chakra-ui/react';
 import { ClientOnly, IconButton, Skeleton, Span } from '@chakra-ui/react';
