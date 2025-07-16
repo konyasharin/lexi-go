@@ -1,6 +1,13 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+echo "Running check-types..."
 pnpm run check-types
+
+echo "Running fix..."
 pnpm run fix
+
+echo "Running lint..."
 pnpm run lint
+
+echo "Pre-commit finished successfully!!!"
