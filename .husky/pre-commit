@@ -1,26 +1,38 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+if [ -t 1 ]; then
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[1;33m'
+  BLUE='\033[0;34m'
+  NC='\033[0m' # No Color
+else
+  RED=''
+  GREEN=''
+  YELLOW=''
+  BLUE=''
+  NC=''
+fi
 
-echo "${BLUE}⏳ Running check-types...${NC}"
+log() {
+  printf "%b%s%b\n" "$1" "$2" "$NC"
+}
+
+log "$BLUE" "⏳ Running check-types..."
 if ! pnpm run check-types; then
-  echo "${RED}✖ Type check failed! Please fix errors before committing.${NC}"
+  log "$RED" "✖ Type check failed! Please fix errors before committing."
   exit 1
 fi
 
-echo "${YELLOW}🔧 Running fix...${NC}"
-pnpm run fix || echo "${YELLOW}⚠️ Auto-fix completed with warnings${NC}"
+log "$YELLOW" "🔧 Running fix..."
+pnpm run fix || log "$YELLOW" "⚠️ Auto-fix completed with warnings"
 
-echo "${BLUE}🔍 Running lint...${NC}"
+log "$BLUE" "🔍 Running lint..."
 if ! pnpm run lint; then
-  echo "${RED}✖ Lint errors found! Please fix them before committing.${NC}"
+  log "$RED" "✖ Lint errors found! Please fix them before committing."
   exit 1
 fi
 
-echo "${GREEN}✔ Pre-commit checks passed successfully!${NC}"
-echo "${GREEN}🎉 You're ready to commit!${NC}"
+log "$GREEN" "✔ Pre-commit checks passed successfully!"
+log "$GREEN" "🎉 You're ready to commit!"
