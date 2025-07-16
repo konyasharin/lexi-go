@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
+import { Button } from '@repo/components/shadcn';
+import { Header } from '@repo/components/widgets';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import './globals.css';
-import {Header} from "@repo/components/widgets";
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header className={'text-6xl'} />
+        <Button>122</Button>
         <div className={'bg-black text-white text-4xl'}>123</div>
         {children}
       </body>
