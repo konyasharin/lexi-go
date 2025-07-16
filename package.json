@@ -7,8 +7,7 @@
     "lint": "turbo run lint",
     "fix": "turbo run fix",
     "check-types": "turbo run check-types",
-    "prepare": "pnpm exec husky install",
-    "lint-staged": "turbo run lint-staged"
+    "prepare": "pnpm exec husky install"
   },
   "devDependencies": {
     "husky": "^9.1.7",
