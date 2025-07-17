@@ -5,7 +5,8 @@
   "exports": {
     "./styles": "./dist/index.css",
     "./widgets": "./dist/widgets/index.js",
-    "./shadcn": "./dist/shadcn/index.js"
+    "./shadcn": "./dist/shadcn/index.js",
+    "./ui": "./dist/ui/index.js"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

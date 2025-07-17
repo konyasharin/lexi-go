@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
-import { Button } from '@repo/components/shadcn';
-import { Header } from '@repo/components/widgets';
+import clsx from 'clsx';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+
+import { Layout } from '@/modules/layout';
 
 import './globals.css';
 
@@ -26,12 +27,14 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="ru" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Header className={'text-6xl'} />
-        <Button>122</Button>
-        <div className={'bg-black text-white text-4xl'}>123</div>
-        {children}
+    <html lang="ru">
+      <body
+        className={clsx(
+          `${geistSans.variable} ${geistMono.variable}`,
+          'dark bg-background text-foreground',
+        )}
+      >
+        <Layout>{children}</Layout>
       </body>
     </html>
   );
