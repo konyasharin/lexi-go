@@ -26,7 +26,7 @@ if ! pnpm run check-types; then
 fi
 
 log "$YELLOW" "🔧 Running fix..."
-pnpm run fix || log "$YELLOW" "⚠️ Auto-fix completed with warnings"
+pnpm run fix && git add . || log "$YELLOW" "⚠️ Auto-fix completed with warnings"
 
 log "$BLUE" "🔍 Running lint..."
 if ! pnpm run lint; then
