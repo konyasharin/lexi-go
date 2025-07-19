@@ -14,7 +14,7 @@ import { Providers } from './providers';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Lexi-go',
+  title: 'Lexi-Go',
   description: 'Learning languages application',
 };
 

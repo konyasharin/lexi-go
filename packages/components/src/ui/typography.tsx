@@ -19,7 +19,7 @@ export const Typography: FC<TypographyProps> = props => {
       className={clsx(
         {
           'text-4xl font-extrabold': variant === 'h1',
-          'text-3xl font-semibold': variant === 'h2',
+          'text-3xl font-bold': variant === 'h2',
         },
         props.className,
       )}

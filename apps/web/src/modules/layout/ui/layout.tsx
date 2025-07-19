@@ -1,19 +1,32 @@
 import { FC, ReactNode } from 'react';
+import { Button } from '@repo/components/shadcn';
 import { Container, Logo } from '@repo/components/ui';
 import { Header } from '@repo/components/widgets';
+import { Link } from '@repo/i18n';
+import { useTranslations } from 'next-intl';
+
+import { APP_PATHS } from '@/shared/constants';
 
 interface LayoutProps {
   children?: ReactNode;
 }
 
 export const Layout: FC<LayoutProps> = props => {
+  const t = useTranslations();
+
   return (
     <>
       <Header>
         <Header.Group>
-          <Logo />
+          <Link href={APP_PATHS.MAIN}>
+            <Logo />
+          </Link>
         </Header.Group>
-        <Header.Group>123</Header.Group>
+        <Header.Group>
+          <Link href={APP_PATHS.SIGN_IN}>
+            <Button>{t('SIGN_IN')}</Button>
+          </Link>
+        </Header.Group>
       </Header>
       <Container className={'pt-32'}>{props.children}</Container>
     </>
