@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { notFound } from 'next/navigation';
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { hasLocale } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
 import { Layout } from '@/modules/layout';
@@ -49,11 +49,9 @@ export default async function RootLayout({
           'dark bg-background text-foreground',
         )}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>
-            <Layout>{children}</Layout>
-          </Providers>
-        </NextIntlClientProvider>
+        <Providers locale={locale} messages={messages}>
+          <Layout>{children}</Layout>
+        </Providers>
       </body>
     </html>
   );
