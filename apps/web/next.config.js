@@ -1,4 +1,8 @@
+import createNextIntlPlugin from 'next-intl/plugin';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {};
 
-export default nextConfig;
+const withI18N = createNextIntlPlugin('./src/modules/i18n/request.ts');
+
+export default withI18N(nextConfig);

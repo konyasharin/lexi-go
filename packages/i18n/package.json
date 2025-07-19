@@ -1,0 +1,29 @@
+{
+  "name": "@repo/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./messages": "./messages/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "fix": "eslint . --fix",
+    "check-types": "tsc --noEmit --pretty"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
+    "eslint": "^9.31.0",
+    "typescript": "5.8.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "next": "^15.3.0",
+    "next-intl": "^4.3.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
