@@ -1,5 +1,4 @@
-import { routing } from '@repo/i18n';
-import { importLang } from '@repo/i18n/messages';
+import { importLang, routing } from '@repo/i18n';
 import { hasLocale } from 'next-intl';
 import { getRequestConfig } from 'next-intl/server';
 
