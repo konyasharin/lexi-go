@@ -1,11 +1,8 @@
 import { ReactNode } from 'react';
-import { routing } from '@repo/i18n';
 import clsx from 'clsx';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
-import { notFound } from 'next/navigation';
-import { hasLocale } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getLocale, getMessages } from 'next-intl/server';
 
 import { Layout } from '@/modules/layout';
 
@@ -29,17 +26,12 @@ const geistMono = localFont({
 
 export default async function RootLayout({
   children,
-  params,
 }: {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
   // Ensure that the incoming `locale` is valid
-  const { locale } = await params;
+  const locale = await getLocale();
   const messages = await getMessages({ locale: locale });
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
 
   return (
     <html lang={locale}>
@@ -49,7 +41,7 @@ export default async function RootLayout({
           'dark bg-background text-foreground',
         )}
       >
-        <Providers locale={locale} messages={messages}>
+        <Providers i18n={{ locale, messages }}>
           <Layout>{children}</Layout>
         </Providers>
       </body>

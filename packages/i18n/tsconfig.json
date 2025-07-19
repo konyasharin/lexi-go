@@ -1,8 +1,0 @@
-{
-  "extends": "@repo/typescript-config/nextjs.json",
-  "compilerOptions": {
-    "resolveJsonModule": true
-  },
-  "include": ["src", "messages", "env.d.ts"],
-  "exclude": ["node_modules", "dist"]
-}
