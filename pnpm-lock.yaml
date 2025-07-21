@@ -48,9 +48,6 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@repo/i18n':
-        specifier: workspace:*
-        version: link:../../packages/i18n
       '@repo/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
@@ -193,43 +190,6 @@ importers:
       typescript-eslint:
         specifier: ^8.36.0
         version: 8.36.0(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.2)
-
-  packages/i18n:
-    dependencies:
-      dotenv:
-        specifier: ^17.2.0
-        version: 17.2.0
-      next:
-        specifier: ^15.3.0
-        version: 15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      next-intl:
-        specifier: ^4.3.4
-        version: 4.3.4(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
-      react:
-        specifier: ^19.1.0
-        version: 19.1.0
-      react-dom:
-        specifier: ^19.1.0
-        version: 19.1.0(react@19.1.0)
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@types/react':
-        specifier: 19.1.0
-        version: 19.1.0
-      '@types/react-dom':
-        specifier: 19.1.1
-        version: 19.1.1(@types/react@19.1.0)
-      eslint:
-        specifier: ^9.31.0
-        version: 9.31.0(jiti@2.4.2)
-      typescript:
-        specifier: 5.8.2
-        version: 5.8.2
 
   packages/tailwind-config:
     devDependencies:
@@ -1051,10 +1011,6 @@ packages:
 
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
-    engines: {node: '>=12'}
-
-  dotenv@17.2.0:
-    resolution: {integrity: sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -2963,8 +2919,6 @@ snapshots:
       esutils: 2.0.3
 
   dotenv@16.0.3: {}
-
-  dotenv@17.2.0: {}
 
   dunder-proto@1.0.1:
     dependencies:
