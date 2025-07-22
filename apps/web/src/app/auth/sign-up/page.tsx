@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect } from 'react';
 import {
   Button,
   Card,
@@ -10,8 +13,17 @@ import {
   Input,
   Label,
 } from '@repo/components/shadcn';
+import { useMutation } from '@tanstack/react-query';
+
+import { useTRPC } from '@/modules/trpc';
 
 export default function SignUp() {
+  const trpc = useTRPC();
+  const userCreator = useMutation(trpc.auth.registerUser.mutationOptions());
+  useEffect(() => {
+    userCreator.mutate({ email: 'test@mail.ri', password: '123456' });
+  }, []);
+
   return (
     <Card className={'w-full'}>
       <CardHeader>

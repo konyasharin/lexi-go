@@ -1,0 +1,18 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["build:server"]
+    },
+    "build:server": {
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "with": ["dev:server"]
+    },
+    "dev:server": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
