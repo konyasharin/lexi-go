@@ -48,7 +48,7 @@ export const Providers: FC<ProvidersProps> = props => {
     createTRPCClient<AppRouter>({
       links: [
         httpBatchLink({
-          url: `${process.env.NEXT_PUBLIC_HOST!}:${process.env.NEXT_PUBLIC_SERVER_PORT!}`,
+          url: `${process.env.NEXT_PUBLIC_HOST!}/api/trpc`,
         }),
       ],
     }),
