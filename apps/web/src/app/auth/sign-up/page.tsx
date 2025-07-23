@@ -23,6 +23,7 @@ export default function SignUp() {
   useEffect(() => {
     userCreator.mutate({ email: 'test@mail.ri', password: '123456' });
   }, []);
+  console.log(userCreator.error?.data);
 
   return (
     <Card className={'w-full'}>

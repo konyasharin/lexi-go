@@ -1,13 +1,27 @@
-import { BaseController, ErrorsHandler } from '@/utils';
-
-import { usersTable } from '@/db';
+import {
+  badRequest,
+  BaseController,
+  catchError,
+  internalServerError,
+  ok,
+} from '@/utils';
 
 import { CreateUserSchemaInfer } from './auth.schemas';
+import { AuthService } from './auth.service';
 
 export class AuthController extends BaseController {
+  private readonly _authService = new AuthService();
+
+  @catchError
   public async registerUser(data: CreateUserSchemaInfer) {
-    return await ErrorsHandler.handleAsync(() =>
-      this.db.insert(usersTable).values(data).returning(),
-    );
+    const isAlreadyExists = !!(await this._authService.getUserIdByEmail(
+      data.email,
+    ));
+    if (!isAlreadyExists) {
+      const newUserId = await this._authService.createUser(data);
+      if (newUserId) return ok(newUserId);
+      return internalServerError();
+    }
+    return badRequest({ message: 'User already exists' });
   }
 }

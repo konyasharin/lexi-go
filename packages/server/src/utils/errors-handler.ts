@@ -1,5 +1,7 @@
 import { TRPCError } from '@trpc/server';
 
+import { internalServerError } from './errors';
+
 export class ErrorsHandler {
   public static handle<T>(func: () => T, message?: string) {
     try {
@@ -17,11 +19,12 @@ export class ErrorsHandler {
     }
   }
 
-  private static catchBaseError(e: unknown, message?: string) {
+  public static catchBaseError(e: unknown, message?: string) {
     console.error(e);
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: message ?? 'Unknown error occurred',
-    });
+    if (!(e instanceof TRPCError)) {
+      return internalServerError({ message });
+    }
+
+    throw e;
   }
 }

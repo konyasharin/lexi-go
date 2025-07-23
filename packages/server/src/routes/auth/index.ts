@@ -6,5 +6,7 @@ import { publicProcedure, router } from '@/trpc';
 export const authRouter = router({
   registerUser: publicProcedure
     .input(createUserSchema)
-    .mutation(({ input }) => new AuthController().registerUser(input)),
+    .mutation(
+      async ({ input }) => await new AuthController().registerUser(input),
+    ),
 });
