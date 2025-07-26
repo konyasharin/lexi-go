@@ -4,8 +4,9 @@
     "plugins": [
       {
         "name": "next"
-      }
+      },
     ],
+    "allowArbitraryExtensions": true,
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"],
