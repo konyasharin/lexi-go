@@ -10,8 +10,8 @@
     "lint": "eslint . --max-warnings 0",
     "fix": "eslint . --fix",
     "check-types": "tsc --noEmit --pretty",
-    "dev:server": "concurrently \"tsc -w\" \"tsc-alias -w\"",
-    "build:server": "tsc && tsc-alias"
+    "dev": "concurrently \"tsc -w\" \"tsc-alias -w\"",
+    "build": "tsc && tsc-alias"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

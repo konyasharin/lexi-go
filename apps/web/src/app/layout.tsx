@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import clsx from 'clsx';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
@@ -42,7 +42,9 @@ export default async function RootLayout({
         )}
       >
         <Providers i18n={{ locale, messages }}>
-          <Layout>{children}</Layout>
+          <Suspense>
+            <Layout>{children}</Layout>
+          </Suspense>
         </Providers>
       </body>
     </html>
