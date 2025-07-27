@@ -7,11 +7,9 @@ function handler(req: Request) {
     endpoint: '/api/trpc',
     req,
     router: appRouter,
-    // createContext: (_: FetchCreateContextFnOptions) => {
-    //   return {
-    //     session: null,
-    //   };
-    // },
+    createContext: () => {
+      return {};
+    },
   });
 }
 export { handler as GET, handler as POST };

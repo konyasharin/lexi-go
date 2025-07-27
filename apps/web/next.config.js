@@ -1,7 +1,9 @@
 import createNextIntlPlugin from 'next-intl/plugin';
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  productionBrowserSourceMaps: true
+};
 
 const withI18N = createNextIntlPlugin({
   experimental: {
