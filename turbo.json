@@ -6,12 +6,8 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**"]
-    },
-    "web#build": {
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "dependsOn": ["@repo/server#build", "@repo/components#build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**","dist/**"],
+      "cache": false
     },
     "lint": {
       "dependsOn": ["^lint"]
