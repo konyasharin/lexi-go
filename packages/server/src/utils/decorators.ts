@@ -5,7 +5,7 @@ export const catchError = (target: any, propertyKey: string, descriptor: Propert
   const method = descriptor.value;
 
   descriptor.value = async function (...args: any) {
-    return await ErrorsHandler.handleAsync(async () => await method.apply(this, args));
+    await ErrorsHandler.handleAsync(async () => await method.apply(this, args));
   };
 
   return descriptor;

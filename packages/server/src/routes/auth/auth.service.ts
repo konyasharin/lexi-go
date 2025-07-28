@@ -14,14 +14,12 @@ export class AuthService extends BaseService {
   }
 
   public async getUserIdByEmail(email: UserSchemaInfer['email']) {
-    return (
-      await this.db.query.usersTable.findFirst({
-        where: (user, { eq }) => eq(user.email, email),
-        columns: {
-          id: true,
-        },
-      })
-    )?.id;
+    return await this.db.query.usersTable.findFirst({
+      where: (user, { eq }) => eq(user.email, email),
+      columns: {
+        id: true,
+      },
+    });
   }
 
   public async getUserById(id: UserSchemaInfer['id']) {

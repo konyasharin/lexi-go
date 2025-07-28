@@ -3,6 +3,4 @@ export * from './base-service';
 export * from './decorators';
 export * from './errors';
 export * from './errors-handler';
-export * from './generateJwt';
-export * from './generatePassword';
 export * from './ok';
