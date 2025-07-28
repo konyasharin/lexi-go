@@ -22,7 +22,7 @@ export const config = [
       "simple-import-sort": simpleImportSortPlugin,
     },
     rules: {
-      "turbo/no-undeclared-env-vars": "off",
+      "turbo/no-undeclared-env-vars": "warn",
       'prettier/prettier': [
         'warn', {
           endOfLine: 'auto'

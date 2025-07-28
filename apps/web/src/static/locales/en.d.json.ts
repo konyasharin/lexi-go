@@ -5,7 +5,12 @@ declare const messages: {
   "test": "test lang",
   "AUTH": {
     "SIGN_IN": "Sign in",
-    "SIGN_UP": "Sign up"
+    "SIGN_UP": "Sign up",
+    "SIGN_UP_NEW_ACCOUNT": "Sign up your new account",
+    "SIGN_UP_WITH": "Sign up with {serviceName}"
+  },
+  "COMMON": {
+    "LOADING": "Loading. Wait a few time..."
   }
 };
 export default messages;

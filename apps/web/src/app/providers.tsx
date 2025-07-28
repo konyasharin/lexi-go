@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import { Locale, NextIntlClientProvider, useMessages } from 'next-intl';
 
+import { AuthContextProvider } from '@/modules/auth';
 import { TRPCProvider } from '@/modules/trpc';
 
 interface ProvidersProps {
@@ -58,7 +59,7 @@ export const Providers: FC<ProvidersProps> = props => {
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
         <NextIntlClientProvider {...props.i18n}>
-          {props.children}
+          <AuthContextProvider>{props.children}</AuthContextProvider>
         </NextIntlClientProvider>
       </TRPCProvider>
     </QueryClientProvider>
