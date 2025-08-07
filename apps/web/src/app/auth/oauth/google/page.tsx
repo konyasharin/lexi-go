@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Loader } from '@repo/components/ui';
 import { useTranslations } from 'next-intl';
 
-import { useGoogleAuth } from '@/modules/auth';
+import { useGoogleAuth } from '@/modules/auth/client';
 
 export default function GoogleOauth() {
   const googleAuth = useGoogleAuth();

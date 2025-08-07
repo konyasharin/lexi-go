@@ -5,6 +5,8 @@ import { Header } from '@repo/components/widgets';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { DynamicLayout } from './dynamic-layout';
+
 import { APP_PATHS } from '@/shared/constants';
 
 interface LayoutProps {
@@ -32,6 +34,7 @@ export const Layout: FC<LayoutProps> = props => {
         </Header.Group>
       </Header>
       <Container className={'pt-32'}>{props.children}</Container>
+      <DynamicLayout />
     </>
   );
 };

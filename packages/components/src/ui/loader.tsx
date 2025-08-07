@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { HashLoader } from 'react-spinners';
+import { ClockLoader } from 'react-spinners';
+import { clsx } from 'clsx';
 import colors from 'tailwindcss/colors';
 
 import { Typography } from '@/ui/typography';
@@ -13,9 +14,13 @@ interface LoaderProps {
 
 export const Loader: FC<LoaderProps> = props => {
   return (
-    <div>
-      {props.label && <Typography>{props.label}</Typography>}
-      <HashLoader color={props.color ?? colors.white} size={props.size ?? 32} />
+    <div className={clsx('flex flex-col items-center gap-6', props.className)}>
+      {props.label && <Typography variant={'h5'}>{props.label}</Typography>}
+      <ClockLoader
+        loading
+        color={props.color ?? colors.white}
+        size={props.size ?? 36}
+      />
     </div>
   );
 };

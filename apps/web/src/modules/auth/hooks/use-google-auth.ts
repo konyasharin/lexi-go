@@ -1,11 +1,15 @@
 import { useContext, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { redirect, useSearchParams } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { useTRPC } from '@/modules/trpc';
 
 import { AuthContext } from '../context';
 import { TokensService } from '../utils';
+
+import { APP_PATHS } from '@/shared/constants';
 
 export const useGoogleAuth = () => {
   const trpc = useTRPC();
@@ -13,7 +17,9 @@ export const useGoogleAuth = () => {
     trpc.auth.authWithGoogle.mutationOptions(),
   );
   const searchParams = useSearchParams();
+  const router = useRouter();
   const auth = useContext(AuthContext);
+  const t = useTranslations();
 
   const redirectToGoogleOauth = () => {
     const url = new URL(process.env.NEXT_PUBLIC_GOOGLE_OAUTH_URL!);
@@ -33,6 +39,8 @@ export const useGoogleAuth = () => {
     const code = searchParams.get('code');
     if (code) {
       handleCodeController.mutate(code);
+    } else {
+      router.push(APP_PATHS.SIGN_IN);
     }
   };
 
@@ -42,6 +50,14 @@ export const useGoogleAuth = () => {
       auth?.setUserFromLocalStorageToken();
     }
   }, [handleCodeController.data]);
+
+  useEffect(() => {
+    if (handleCodeController.isError) {
+      toast.error(t('COMMON.SOMETHING_ERROR'));
+      console.error(handleCodeController.error);
+      router.push(APP_PATHS.SIGN_IN);
+    }
+  }, [handleCodeController.isError]);
 
   return {
     redirectToGoogleOauth,

@@ -4,9 +4,15 @@
     "SIGN_IN": "Sign in",
     "SIGN_UP": "Sign up",
     "SIGN_UP_NEW_ACCOUNT": "Sign up your new account",
-    "SIGN_UP_WITH": "Sign up with {serviceName}"
+    "SIGN_UP_WITH": "Sign up with {serviceName}",
+    "SIGN_IN_WITH": "Sign in with {serviceName}",
+    "SIGN_IN_SUCCESSFULLY": "Authorization was successfully"
+  },
+  "NOT_FOUND": {
+    "TITLE": "Page not found"
   },
   "COMMON": {
+    "SOMETHING_ERROR": "Something went wrong...",
     "LOADING": "Loading. Wait a few time..."
   }
 }

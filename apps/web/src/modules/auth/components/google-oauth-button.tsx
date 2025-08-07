@@ -1,15 +1,16 @@
 'use client';
 
 import { FC } from 'react';
+import { FcGoogle } from 'react-icons/fc';
 import { Button } from '@repo/components/shadcn';
 
-import { useGoogleAuth } from '@/modules/auth';
+import { useGoogleAuth } from '@/modules/auth/client';
 
-interface GoogleButtonProps {
+interface GoogleOauthButtonProps {
   children?: string;
 }
 
-export const GoogleButton: FC<GoogleButtonProps> = props => {
+export const GoogleOauthButton: FC<GoogleOauthButtonProps> = props => {
   const googleAuth = useGoogleAuth();
 
   return (
@@ -18,6 +19,7 @@ export const GoogleButton: FC<GoogleButtonProps> = props => {
       className="w-full"
       onClick={() => googleAuth.redirectToGoogleOauth()}
     >
+      <FcGoogle />
       {props.children}
     </Button>
   );
