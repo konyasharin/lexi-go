@@ -46,7 +46,10 @@ export const useGoogleAuth = () => {
   useEffect(() => {
     if (handleCodeController.isSuccess) {
       toast.success(t("AUTH.SIGN_IN_SUCCESSFULLY"));
-      authContext?.updateUser().then(() => router.push(APP_PATHS.MAIN));
+      authContext
+        ?.updateUser()
+        // Cookies apply only after reload, so you can't use router.push()
+        .then(() => (window.location.href = APP_PATHS.MAIN));
     }
   }, [handleCodeController.isSuccess]);
 

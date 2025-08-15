@@ -20,6 +20,7 @@ export function middleware(request: NextRequest) {
   const { origin, pathname } = nextUrl;
 
   const accessToken = cookies.get(process.env.NEXT_PUBLIC_JWT_ACCESS_KEY!);
+  console.log(accessToken, pathname);
   if (!accessToken && !pathname.startsWith("/auth"))
     return NextResponse.redirect(new URL(`${origin}${APP_PATHS.SIGN_IN}`));
   return NextResponse.next();
