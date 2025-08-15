@@ -80,12 +80,17 @@ export class AuthController extends BaseController {
       if (!user) return internalServerError();
 
       const tokens = generateJwt(user);
-      Cookie.set(resHeaders, process.env.JWT_ACCESS_KEY!, tokens.accessToken, {
-        expires: new Date(Date.now() + getJwtExpiresTime("access")),
-      });
       Cookie.set(
         resHeaders,
-        process.env.JWT_REFRESH_KEY!,
+        process.env.NEXT_PUBLIC_JWT_ACCESS_KEY!,
+        tokens.accessToken,
+        {
+          expires: new Date(Date.now() + getJwtExpiresTime("access")),
+        },
+      );
+      Cookie.set(
+        resHeaders,
+        process.env.NEXT_PUBLIC_JWT_REFRESH_KEY!,
         tokens.refreshToken,
         {
           expires: new Date(Date.now() + getJwtExpiresTime("refresh")),
