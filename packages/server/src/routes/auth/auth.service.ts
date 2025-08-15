@@ -1,8 +1,8 @@
-import { BaseService } from '@/utils';
+import { BaseService } from "@/utils";
 
-import { usersTable } from '@/db';
+import { usersTable } from "@/db";
 
-import { CreateUserSchemaInfer, UserSchemaInfer } from './auth.schemas';
+import { CreateUserSchemaInfer, UserSchemaInfer } from "./auth.schemas";
 
 export class AuthService extends BaseService {
   public async createUser(data: CreateUserSchemaInfer) {
@@ -13,7 +13,7 @@ export class AuthService extends BaseService {
     return newUserId[0];
   }
 
-  public async getUserIdByEmail(email: UserSchemaInfer['email']) {
+  public async getUserIdByEmail(email: UserSchemaInfer["email"]) {
     return (
       await this.db.query.usersTable.findFirst({
         where: (user, { eq }) => eq(user.email, email),
@@ -24,7 +24,7 @@ export class AuthService extends BaseService {
     )?.id;
   }
 
-  public async getUserById(id: UserSchemaInfer['id']) {
+  public async getUserById(id: UserSchemaInfer["id"]) {
     return await this.db.query.usersTable.findFirst({
       where: (user, { eq }) => eq(user.id, id),
       columns: {

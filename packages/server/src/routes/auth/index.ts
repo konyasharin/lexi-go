@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { AuthController } from './auth.controller';
-import { createUserSchema } from './auth.schemas';
+import { AuthController } from "./auth.controller";
+import { createUserSchema } from "./auth.schemas";
 
-import { publicProcedure, router } from '@/trpc';
+import { publicProcedure, router } from "@/trpc";
 
-export * from './auth.schemas';
+export * from "./auth.schemas";
 export const authRouter = router({
   registerUser: publicProcedure
     .input(createUserSchema)
@@ -15,6 +15,7 @@ export const authRouter = router({
   authWithGoogle: publicProcedure
     .input(z.string())
     .mutation(
-      async ({ input }) => await new AuthController().authWithGoogle(input),
+      async ({ input, ctx }) =>
+        await new AuthController().authWithGoogle(input, ctx.resHeaders),
     ),
 });

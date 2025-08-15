@@ -1,1 +1,1 @@
-export * from './appPaths';
+export * from "./appPaths";

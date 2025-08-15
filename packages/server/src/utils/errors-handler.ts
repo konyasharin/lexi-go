@@ -1,6 +1,6 @@
-import { TRPCError } from '@trpc/server';
+import { TRPCError } from "@trpc/server";
 
-import { internalServerError } from './errors';
+import { internalServerError } from "./errors";
 
 export class ErrorsHandler {
   public static handle<T>(func: () => T, message?: string) {

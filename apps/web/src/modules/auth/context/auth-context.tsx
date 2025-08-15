@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { createContext, FC, ReactNode } from 'react';
+import { createContext, FC, ReactNode } from "react";
 
-import { useAuth } from '../hooks';
+import { GetTokensAwaited } from "@/modules/auth";
 
-interface AuthContextProviderProps {
+import { useAuth } from "../hooks";
+
+interface AuthContextProviderProps extends GetTokensAwaited {
   children?: ReactNode;
 }
 
@@ -12,10 +14,11 @@ export const AuthContext = createContext<ReturnType<typeof useAuth> | null>(
   null,
 );
 
-export const AuthContextProvider: FC<AuthContextProviderProps> = props => {
-  const auth = useAuth();
+export const AuthContextProvider: FC<AuthContextProviderProps> = ({
+  children,
+  ...jwt
+}) => {
+  const auth = useAuth(jwt);
 
-  return (
-    <AuthContext.Provider value={auth}>{props.children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };

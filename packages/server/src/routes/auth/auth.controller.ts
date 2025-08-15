@@ -1,26 +1,28 @@
-import axios, { AxiosResponse } from 'axios';
-import jwt from 'jsonwebtoken';
+import axios, { AxiosResponse } from "axios";
+import jwt from "jsonwebtoken";
 
 import {
   badRequest,
   BaseController,
   catchError,
+  Cookie,
   generateJwt,
   generatePassword,
+  getJwtExpiresTime,
   internalServerError,
   ok,
-} from '@/utils';
+} from "@/utils";
 
-import 'dotenv/config';
+import "dotenv/config";
 
-import { BaseResponseSchemaInfer } from '../schemas';
+import { BaseResponseSchemaInfer } from "../schemas";
 
 import {
   AuthWithGoogleResponseSchemaInfer,
   CreateUserSchemaInfer,
   GoogleUserInfoSchemaInfer,
-} from './auth.schemas';
-import { AuthService } from './auth.service';
+} from "./auth.schemas";
+import { AuthService } from "./auth.service";
 
 export class AuthController extends BaseController {
   private readonly _authService = new AuthService();
@@ -37,19 +39,20 @@ export class AuthController extends BaseController {
       if (newUser) return ok();
       return internalServerError();
     }
-    return badRequest({ message: 'User already exists' });
+    return badRequest({ message: "User already exists" });
   }
 
   @catchError
   public async authWithGoogle(
     code: string,
+    resHeaders: Headers,
   ): Promise<AuthWithGoogleResponseSchemaInfer> {
     const response: AxiosResponse<{ id_token: string }> = await axios.post(
       process.env.GOOGLE_HANDLE_TOKEN_URL!,
       {
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        grant_type: 'authorization_code',
+        grant_type: "authorization_code",
         redirect_uri: `${process.env.NEXT_PUBLIC_HOST!}${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_PATH}`,
         code,
       },
@@ -74,8 +77,21 @@ export class AuthController extends BaseController {
       }
 
       const user = await this._authService.getUserById(userId);
-      if (user) return ok({ tokens: generateJwt(user) });
-      return internalServerError();
+      if (!user) return internalServerError();
+
+      const tokens = generateJwt(user);
+      Cookie.set(resHeaders, process.env.JWT_ACCESS_KEY!, tokens.accessToken, {
+        expires: new Date(Date.now() + getJwtExpiresTime("access")),
+      });
+      Cookie.set(
+        resHeaders,
+        process.env.JWT_REFRESH_KEY!,
+        tokens.refreshToken,
+        {
+          expires: new Date(Date.now() + getJwtExpiresTime("refresh")),
+        },
+      );
+      return ok({ tokens: generateJwt(user) });
     }
 
     return internalServerError();

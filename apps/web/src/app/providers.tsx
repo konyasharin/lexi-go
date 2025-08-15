@@ -1,19 +1,20 @@
-'use client';
+"use client";
 
-import { FC, ReactNode, useState } from 'react';
-import { AppRouter } from '@repo/server';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import { Locale, NextIntlClientProvider, useMessages } from 'next-intl';
+import { FC, ReactNode, useState } from "react";
+import { AppRouter } from "@repo/server";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { Locale, NextIntlClientProvider, useMessages } from "next-intl";
 
-import { AuthContextProvider } from '@/modules/auth';
-import { TRPCProvider } from '@/modules/trpc';
+import { AuthContextProvider, GetTokensAwaited } from "@/modules/auth";
+import { TRPCProvider } from "@/modules/trpc";
 
 interface ProvidersProps {
   i18n: {
     locale: Locale;
     messages: ReturnType<typeof useMessages>;
   };
+  jwt: GetTokensAwaited;
   children?: ReactNode;
 }
 
@@ -30,7 +31,7 @@ const makeQueryClient = () => {
 };
 let browserQueryClient: QueryClient | undefined = undefined;
 const getQueryClient = () => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     // Server: always make a new query client
     return makeQueryClient();
   } else {
@@ -43,7 +44,7 @@ const getQueryClient = () => {
   }
 };
 
-export const Providers: FC<ProvidersProps> = props => {
+export const Providers: FC<ProvidersProps> = (props) => {
   const queryClient = getQueryClient();
   const [trpcClient] = useState(() =>
     createTRPCClient<AppRouter>({
@@ -58,8 +59,10 @@ export const Providers: FC<ProvidersProps> = props => {
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        <NextIntlClientProvider {...props.i18n}>
-          <AuthContextProvider>{props.children}</AuthContextProvider>
+        <NextIntlClientProvider {...props.i18n} timeZone={"Europe/Vienna"}>
+          <AuthContextProvider {...props.jwt}>
+            {props.children}
+          </AuthContextProvider>
         </NextIntlClientProvider>
       </TRPCProvider>
     </QueryClientProvider>

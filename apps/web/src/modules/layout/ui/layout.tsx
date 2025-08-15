@@ -1,21 +1,18 @@
-import { FC, ReactNode } from 'react';
-import { Button } from '@repo/components/shadcn';
-import { Container, Logo } from '@repo/components/ui';
-import { Header } from '@repo/components/widgets';
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { FC, ReactNode } from "react";
+import { Container, Logo } from "@repo/components/ui";
+import { Header } from "@repo/components/widgets";
+import Link from "next/link";
 
-import { DynamicLayout } from './dynamic-layout';
+import { DynamicLayout } from "./dynamic-layout";
+import { HeaderAuthGroup } from "./header-auth-group";
 
-import { APP_PATHS } from '@/shared/constants';
+import { APP_PATHS } from "@/shared/constants";
 
 interface LayoutProps {
   children?: ReactNode;
 }
 
-export const Layout: FC<LayoutProps> = props => {
-  const t = useTranslations();
-
+export const Layout: FC<LayoutProps> = async (props) => {
   return (
     <>
       <Header>
@@ -25,15 +22,10 @@ export const Layout: FC<LayoutProps> = props => {
           </Link>
         </Header.Group>
         <Header.Group>
-          <Link href={APP_PATHS.SIGN_UP}>
-            <Button variant={'outline'}>{t('AUTH.SIGN_UP')}</Button>
-          </Link>
-          <Link href={APP_PATHS.SIGN_IN}>
-            <Button>{t('AUTH.SIGN_IN')}</Button>
-          </Link>
+          <HeaderAuthGroup />
         </Header.Group>
       </Header>
-      <Container className={'pt-32'}>{props.children}</Container>
+      <Container className={"pt-32"}>{props.children}</Container>
       <DynamicLayout />
     </>
   );

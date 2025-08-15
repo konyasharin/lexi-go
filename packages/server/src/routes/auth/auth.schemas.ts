@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { baseResponseSchema } from '../schemas';
+import { baseResponseSchema } from "../schemas";
 
 export const userSchema = z.object({
   id: z.number(),

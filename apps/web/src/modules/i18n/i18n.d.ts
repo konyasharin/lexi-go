@@ -1,10 +1,10 @@
-import { formats } from './utils/request';
+import { formats } from "./utils/request";
 
-import messages from '@/static/locales/en.json';
+import messages from "@/static/locales/en.json";
 
-declare module 'next-intl' {
+declare module "next-intl" {
   interface AppConfig {
-    Locale: 'en';
+    Locale: "en";
     Messages: typeof messages;
     Formats: typeof formats;
   }

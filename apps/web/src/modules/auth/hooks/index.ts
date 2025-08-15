@@ -1,2 +1,2 @@
-export * from './use-auth';
-export * from './use-google-auth';
+export * from "./use-auth";
+export * from "./use-google-auth";

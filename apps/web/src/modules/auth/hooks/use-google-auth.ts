@@ -1,15 +1,14 @@
-import { useContext, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { redirect, useRouter, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
+import { useContext, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
-import { useTRPC } from '@/modules/trpc';
+import { useTRPC } from "@/modules/trpc";
 
-import { AuthContext } from '../context';
-import { TokensService } from '../utils';
+import { AuthContext } from "../context";
 
-import { APP_PATHS } from '@/shared/constants';
+import { APP_PATHS } from "@/shared/constants";
 
 export const useGoogleAuth = () => {
   const trpc = useTRPC();
@@ -18,16 +17,16 @@ export const useGoogleAuth = () => {
   );
   const searchParams = useSearchParams();
   const router = useRouter();
-  const auth = useContext(AuthContext);
   const t = useTranslations();
+  const authContext = useContext(AuthContext);
 
   const redirectToGoogleOauth = () => {
     const url = new URL(process.env.NEXT_PUBLIC_GOOGLE_OAUTH_URL!);
     const queryParams = {
       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
       redirect_uri: `${process.env.NEXT_PUBLIC_HOST!}${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_PATH!}`,
-      response_type: 'code',
-      scope: 'openid profile email',
+      response_type: "code",
+      scope: "openid profile email",
     };
     Object.entries(queryParams).forEach(([key, value]) => {
       url.searchParams.append(key, value);
@@ -36,7 +35,7 @@ export const useGoogleAuth = () => {
   };
 
   const sendCode = () => {
-    const code = searchParams.get('code');
+    const code = searchParams.get("code");
     if (code) {
       handleCodeController.mutate(code);
     } else {
@@ -45,15 +44,15 @@ export const useGoogleAuth = () => {
   };
 
   useEffect(() => {
-    if (handleCodeController.data?.tokens) {
-      TokensService.setTokens(handleCodeController.data.tokens);
-      auth?.setUserFromLocalStorageToken();
+    if (handleCodeController.isSuccess) {
+      toast.success(t("AUTH.SIGN_IN_SUCCESSFULLY"));
+      authContext?.updateUser().then(() => router.push(APP_PATHS.MAIN));
     }
-  }, [handleCodeController.data]);
+  }, [handleCodeController.isSuccess]);
 
   useEffect(() => {
     if (handleCodeController.isError) {
-      toast.error(t('COMMON.SOMETHING_ERROR'));
+      toast.error(t("COMMON.SOMETHING_ERROR"));
       console.error(handleCodeController.error);
       router.push(APP_PATHS.SIGN_IN);
     }

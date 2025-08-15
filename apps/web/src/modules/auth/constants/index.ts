@@ -1,3 +1,3 @@
 export const OAUTH_SERVICES = {
-  GOOGLE: 'Google',
+  GOOGLE: "Google",
 } as const;
