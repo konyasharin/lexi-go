@@ -4,11 +4,10 @@ import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { APP_PATHS } from "@/modules/routing";
 import { useTRPC } from "@/modules/trpc";
 
 import { useAuth } from "./use-auth";
-
-import { APP_PATHS } from "@/shared/constants";
 
 export const useGoogleAuth = (auth: ReturnType<typeof useAuth>) => {
   const trpc = useTRPC();

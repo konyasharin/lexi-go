@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { APP_PATHS } from "@/shared/constants";
+import {
+  APP_PATHS,
+  getMiddlewareRedirectUrl,
+  isPathnameMatchAnyRoute,
+  ONLY_PUBLIC_ROUTES,
+  PRIVATE_ROUTES,
+  PUBLIC_ROUTES,
+} from "@/modules/routing";
 
 export const config = {
   matcher: [
@@ -21,8 +28,30 @@ export function middleware(request: NextRequest) {
 
   const accessToken = cookies.get(process.env.NEXT_PUBLIC_JWT_ACCESS_KEY!);
   const refreshToken = cookies.get(process.env.NEXT_PUBLIC_JWT_REFRESH_KEY!);
+  const isPathnameConfigured = isPathnameMatchAnyRoute(pathname);
 
-  if (!accessToken && !refreshToken && !pathname.startsWith("/auth"))
-    return NextResponse.redirect(new URL(`${origin}${APP_PATHS.SIGN_IN}`));
+  if (
+    !accessToken &&
+    !refreshToken &&
+    !isPathnameMatchAnyRoute(pathname, [
+      ...ONLY_PUBLIC_ROUTES,
+      ...PUBLIC_ROUTES,
+    ]) &&
+    isPathnameConfigured
+  )
+    return NextResponse.redirect(
+      getMiddlewareRedirectUrl(origin, APP_PATHS.SIGN_IN),
+    );
+
+  if (
+    accessToken &&
+    !isPathnameMatchAnyRoute(pathname, [...PRIVATE_ROUTES, ...PUBLIC_ROUTES]) &&
+    isPathnameConfigured
+  ) {
+    return NextResponse.redirect(
+      getMiddlewareRedirectUrl(origin, APP_PATHS.MAIN),
+    );
+  }
+
   return NextResponse.next();
 }

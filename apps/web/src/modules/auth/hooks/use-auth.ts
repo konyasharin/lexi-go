@@ -3,14 +3,13 @@ import { useMutation } from "@tanstack/react-query";
 import jwtUtils from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 
+import { APP_PATHS } from "@/modules/routing";
 import { useTRPC } from "@/modules/trpc";
 
 import { HEAD_START_REFRESH_TIME } from "../constants";
 import { GetTokensAwaited, jwtSchema, UserSchemaInfer } from "../types";
 
 import { useGetTokensController } from "./use-get-tokens-controller";
-
-import { APP_PATHS } from "@/shared/constants";
 
 export const useAuth = (jwt: GetTokensAwaited) => {
   const router = useRouter();

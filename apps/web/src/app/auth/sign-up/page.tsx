@@ -11,8 +11,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { GoogleOauthButton, OAUTH_SERVICES } from "@/modules/auth";
-
-import { APP_PATHS } from "@/shared/constants";
+import { APP_PATHS } from "@/modules/routing";
 
 export default function SignUp() {
   const t = useTranslations("AUTH");

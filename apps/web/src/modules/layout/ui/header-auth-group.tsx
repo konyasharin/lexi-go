@@ -6,8 +6,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { AuthContext } from "@/modules/auth";
-
-import { APP_PATHS } from "@/shared/constants";
+import { APP_PATHS } from "@/modules/routing";
 
 export const HeaderAuthGroup: FC = () => {
   const t = useTranslations();
