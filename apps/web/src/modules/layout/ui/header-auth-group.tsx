@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useContext } from "react";
-import { Button } from "@repo/components/shadcn";
+import { Button, Skeleton } from "@repo/components/shadcn";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -13,7 +13,9 @@ export const HeaderAuthGroup: FC = () => {
   const t = useTranslations();
   const authContext = useContext(AuthContext);
 
-  if (authContext?.user) return <>Profile here</>;
+  if (authContext?.authProcess.inProcess)
+    return <Skeleton className={"h-5 w-10"} />;
+  if (authContext?.auth.user) return <>Profile here</>;
 
   return (
     <>

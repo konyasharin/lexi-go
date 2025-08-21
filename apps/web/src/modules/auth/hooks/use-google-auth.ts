@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -6,11 +6,11 @@ import { toast } from "sonner";
 
 import { useTRPC } from "@/modules/trpc";
 
-import { AuthContext } from "../context";
+import { useAuth } from "./use-auth";
 
 import { APP_PATHS } from "@/shared/constants";
 
-export const useGoogleAuth = () => {
+export const useGoogleAuth = (auth: ReturnType<typeof useAuth>) => {
   const trpc = useTRPC();
   const handleCodeController = useMutation(
     trpc.auth.authWithGoogle.mutationOptions(),
@@ -18,7 +18,6 @@ export const useGoogleAuth = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const t = useTranslations();
-  const authContext = useContext(AuthContext);
 
   const redirectToGoogleOauth = () => {
     const url = new URL(process.env.NEXT_PUBLIC_GOOGLE_OAUTH_URL!);
@@ -44,13 +43,7 @@ export const useGoogleAuth = () => {
   };
 
   useEffect(() => {
-    if (handleCodeController.isSuccess) {
-      toast.success(t("AUTH.SIGN_IN_SUCCESSFULLY"));
-      authContext
-        ?.updateUser()
-        // Cookies apply only after reload, so you can't use router.push()
-        .then(() => (window.location.href = APP_PATHS.MAIN));
-    }
+    if (handleCodeController.isSuccess) auth.updateTokenData();
   }, [handleCodeController.isSuccess]);
 
   useEffect(() => {
@@ -64,5 +57,6 @@ export const useGoogleAuth = () => {
   return {
     redirectToGoogleOauth,
     sendCode,
+    isLoading: handleCodeController.isPending,
   };
 };

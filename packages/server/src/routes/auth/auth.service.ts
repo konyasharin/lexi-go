@@ -1,4 +1,4 @@
-import { BaseService } from "@/utils";
+import { BaseService, Cookie, generateJwt, getJwtExpiresTime } from "@/utils";
 
 import { usersTable } from "@/db";
 
@@ -31,5 +31,27 @@ export class AuthService extends BaseService {
         password: false,
       },
     });
+  }
+
+  public setJwtCookie(data: object, resHeaders: Headers) {
+    const tokens = generateJwt(data);
+    Cookie.set(
+      resHeaders,
+      process.env.NEXT_PUBLIC_JWT_ACCESS_KEY!,
+      tokens.accessToken,
+      {
+        expires: new Date(Date.now() + getJwtExpiresTime("access")),
+      },
+    );
+    Cookie.set(
+      resHeaders,
+      process.env.NEXT_PUBLIC_JWT_REFRESH_KEY!,
+      tokens.refreshToken,
+      {
+        expires: new Date(Date.now() + getJwtExpiresTime("refresh")),
+      },
+    );
+
+    return tokens;
   }
 }

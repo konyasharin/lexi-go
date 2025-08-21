@@ -5,10 +5,7 @@ import {
   badRequest,
   BaseController,
   catchError,
-  Cookie,
-  generateJwt,
   generatePassword,
-  getJwtExpiresTime,
   internalServerError,
   ok,
 } from "@/utils";
@@ -18,7 +15,6 @@ import "dotenv/config";
 import { BaseResponseSchemaInfer } from "../schemas";
 
 import {
-  AuthWithGoogleResponseSchemaInfer,
   CreateUserSchemaInfer,
   GoogleUserInfoSchemaInfer,
 } from "./auth.schemas";
@@ -46,7 +42,7 @@ export class AuthController extends BaseController {
   public async authWithGoogle(
     code: string,
     resHeaders: Headers,
-  ): Promise<AuthWithGoogleResponseSchemaInfer> {
+  ): Promise<BaseResponseSchemaInfer> {
     const response: AxiosResponse<{ id_token: string }> = await axios.post(
       process.env.GOOGLE_HANDLE_TOKEN_URL!,
       {
@@ -78,27 +74,23 @@ export class AuthController extends BaseController {
 
       const user = await this._authService.getUserById(userId);
       if (!user) return internalServerError();
-
-      const tokens = generateJwt(user);
-      Cookie.set(
-        resHeaders,
-        process.env.NEXT_PUBLIC_JWT_ACCESS_KEY!,
-        tokens.accessToken,
-        {
-          expires: new Date(Date.now() + getJwtExpiresTime("access")),
-        },
-      );
-      Cookie.set(
-        resHeaders,
-        process.env.NEXT_PUBLIC_JWT_REFRESH_KEY!,
-        tokens.refreshToken,
-        {
-          expires: new Date(Date.now() + getJwtExpiresTime("refresh")),
-        },
-      );
-      return ok({ tokens: generateJwt(user) });
+      this._authService.setJwtCookie(user, resHeaders);
+      return ok();
     }
 
     return internalServerError();
+  }
+
+  @catchError
+  public async refresh(
+    refreshToken: string,
+    resHeaders: Headers,
+  ): Promise<BaseResponseSchemaInfer> {
+    const { exp, iat, ...data } = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET!,
+    ) as { exp: number; iat: number };
+    this._authService.setJwtCookie(data, resHeaders);
+    return ok();
   }
 }

@@ -28,16 +28,8 @@ export const tokensSchema = z.object({
   refreshToken: z.string(),
 });
 
-export const authWithGoogleResponseSchema = z.object({
-  ...baseResponseSchema.shape,
-  tokens: z.union([tokensSchema, z.undefined()]),
-});
-
 export type UserSchemaInfer = z.infer<typeof userSchema>;
 export type CreateUserSchemaInfer = z.infer<typeof createUserSchema>;
 export type UserPublicSchemaInfer = z.infer<typeof userPublicSchema>;
 export type GoogleUserInfoSchemaInfer = z.infer<typeof googleUserInfoSchema>;
 export type TokensSchemaInfer = z.infer<typeof tokensSchema>;
-export type AuthWithGoogleResponseSchemaInfer = z.infer<
-  typeof authWithGoogleResponseSchema
->;

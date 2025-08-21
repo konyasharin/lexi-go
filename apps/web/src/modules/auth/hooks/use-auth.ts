@@ -1,44 +1,88 @@
-import { useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import { useEffect, useMemo, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import jwtUtils from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 
-import { GetTokensAwaited, userSchema, UserSchemaInfer } from "../types";
+import { useTRPC } from "@/modules/trpc";
+
+import { HEAD_START_REFRESH_TIME } from "../constants";
+import { GetTokensAwaited, jwtSchema, UserSchemaInfer } from "../types";
+
+import { useGetTokensController } from "./use-get-tokens-controller";
 
 import { APP_PATHS } from "@/shared/constants";
 
 export const useAuth = (jwt: GetTokensAwaited) => {
-  const getUserFromToken = (token: string) => {
-    const decodedUser = userSchema.safeParse(jwtUtils.decode(token));
-    if (decodedUser.success) return decodedUser.data;
+  const router = useRouter();
+  const trpc = useTRPC();
+  const refreshController = useMutation(trpc.auth.refresh.mutationOptions());
+  const getTokensController = useGetTokensController();
+  const [currentJwt, setCurrentJwt] = useState<GetTokensAwaited>(jwt);
 
-    console.error(decodedUser.error);
+  const getDataFromToken = (token: string) => {
+    const decodedToken = jwtSchema.safeParse(jwtUtils.decode(token));
+    if (decodedToken.success) return decodedToken.data;
+
+    console.error(decodedToken.error);
     return null;
   };
 
-  const [user, setUser] = useState<UserSchemaInfer | null>(() => {
-    if (jwt.accessToken) return getUserFromToken(jwt.accessToken.value);
-    return null;
-  });
-  const router = useRouter();
+  const refresh = (refreshToken: string) => {
+    if (!refreshController.isPending) refreshController.mutate(refreshToken);
+  };
 
-  const updateUser = async () => {
+  const createRefreshTimeout = (endTime: number, refreshToken: string) => {
+    return setTimeout(
+      () => {
+        refresh(refreshToken);
+      },
+      endTime * 1000 - new Date().getTime() - HEAD_START_REFRESH_TIME,
+    );
+  };
+
+  const tokenData = useMemo(() => {
+    if (!currentJwt.accessToken) {
+      if (currentJwt.refreshToken) refresh(currentJwt.refreshToken.value);
+      return null;
+    }
+    const newTokenData = getDataFromToken(currentJwt.accessToken.value);
+    if (newTokenData && currentJwt.refreshToken)
+      createRefreshTimeout(newTokenData.exp, currentJwt.refreshToken.value);
+
+    return newTokenData;
+  }, [currentJwt]);
+
+  const user = useMemo<UserSchemaInfer | null>(() => {
+    if (!tokenData) return null;
+    return {
+      id: tokenData.id,
+      email: tokenData.email,
+    };
+  }, [tokenData]);
+
+  const updateTokenData = async () => {
     try {
-      const response = await axios.get<
-        never,
-        AxiosResponse<{ tokens: GetTokensAwaited }>
-      >(`${process.env.NEXT_PUBLIC_HOST!}/api/tokens`);
-      const tokens = response.data.tokens;
-      if (tokens.accessToken)
-        setUser(getUserFromToken(tokens.accessToken.value));
+      const tokens = (await getTokensController.refetch()).data?.data.tokens;
+      if (!tokens) return;
+
+      // Cookies apply only after reload, so you must use router.refresh()
+      router.push(APP_PATHS.MAIN);
+      router.refresh();
+      setCurrentJwt(tokens);
     } catch (error) {
       console.error(error);
       router.push(APP_PATHS.SIGN_IN);
     }
   };
 
+  useEffect(() => {
+    if (refreshController.isSuccess) updateTokenData();
+  }, [refreshController.isSuccess]);
+
   return {
+    tokenData,
+    updateTokenData,
     user,
-    updateUser,
+    isLoading: refreshController.isPending || getTokensController.isLoading,
   };
 };

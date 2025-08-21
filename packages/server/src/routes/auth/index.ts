@@ -18,4 +18,10 @@ export const authRouter = router({
       async ({ input, ctx }) =>
         await new AuthController().authWithGoogle(input, ctx.resHeaders),
     ),
+  refresh: publicProcedure
+    .input(z.string())
+    .mutation(
+      async ({ input, ctx }) =>
+        await new AuthController().refresh(input, ctx.resHeaders),
+    ),
 });
