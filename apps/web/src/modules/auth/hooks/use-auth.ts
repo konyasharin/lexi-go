@@ -9,6 +9,7 @@ import { useTRPC } from "@/modules/trpc";
 import { HEAD_START_REFRESH_TIME } from "../constants";
 import { GetTokensAwaited, jwtSchema, UserSchemaInfer } from "../types";
 
+import { useDeleteTokensController } from "./use-delete-tokens-controller";
 import { useGetTokensController } from "./use-get-tokens-controller";
 
 export const useAuth = (jwt: GetTokensAwaited) => {
@@ -16,6 +17,7 @@ export const useAuth = (jwt: GetTokensAwaited) => {
   const trpc = useTRPC();
   const refreshController = useMutation(trpc.auth.refresh.mutationOptions());
   const getTokensController = useGetTokensController();
+  const deleteTokensController = useDeleteTokensController();
   const [currentJwt, setCurrentJwt] = useState<GetTokensAwaited>(jwt);
 
   const getDataFromToken = (token: string) => {
@@ -37,6 +39,12 @@ export const useAuth = (jwt: GetTokensAwaited) => {
       },
       endTime * 1000 - new Date().getTime() - HEAD_START_REFRESH_TIME,
     );
+  };
+
+  const routerPushOnCookieUpdate = (pathname: string) => {
+    // Cookies apply only after reload, so you must use router.refresh()
+    router.push(pathname);
+    router.refresh();
   };
 
   const tokenData = useMemo(() => {
@@ -64,14 +72,19 @@ export const useAuth = (jwt: GetTokensAwaited) => {
       const tokens = (await getTokensController.refetch()).data?.data.tokens;
       if (!tokens) return;
 
-      // Cookies apply only after reload, so you must use router.refresh()
-      router.push(APP_PATHS.MAIN);
-      router.refresh();
+      routerPushOnCookieUpdate(APP_PATHS.MAIN);
       setCurrentJwt(tokens);
     } catch (error) {
       console.error(error);
       router.push(APP_PATHS.SIGN_IN);
     }
+  };
+
+  const logout = async () => {
+    await deleteTokensController.mutate();
+    setCurrentJwt({ accessToken: undefined, refreshToken: undefined });
+
+    routerPushOnCookieUpdate(APP_PATHS.SIGN_IN);
   };
 
   useEffect(() => {
@@ -82,6 +95,7 @@ export const useAuth = (jwt: GetTokensAwaited) => {
     tokenData,
     updateTokenData,
     user,
+    logout,
     isLoading: refreshController.isPending || getTokensController.isLoading,
   };
 };

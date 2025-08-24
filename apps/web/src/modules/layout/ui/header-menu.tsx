@@ -1,12 +1,13 @@
 "use client";
 
-import { FC, ReactNode, useMemo } from "react";
+import { FC, ReactNode, useContext, useMemo } from "react";
 import { CiSettings } from "react-icons/ci";
 import { IoExitOutline } from "react-icons/io5";
 import { Menu, MenuItemContent } from "@repo/components/widgets/menu";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { AuthContext } from "@/modules/auth";
 import { APP_PATHS } from "@/modules/routing";
 
 interface HeaderMenuProps {
@@ -14,6 +15,7 @@ interface HeaderMenuProps {
 }
 
 export const HeaderMenu: FC<HeaderMenuProps> = (props) => {
+  const authContext = useContext(AuthContext);
   const router = useRouter();
   const t = useTranslations();
 
@@ -27,7 +29,9 @@ export const HeaderMenu: FC<HeaderMenuProps> = (props) => {
       {
         text: t("HEADER_MENU.EXIT"),
         icon: <IoExitOutline size={24} />,
-        onClick: () => {},
+        onClick: () => {
+          authContext?.auth.logout();
+        },
         className: "hover:text-red-500 transition",
       },
     ],

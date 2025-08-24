@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getTokens } from "@/modules/auth";
+import { deleteTokens, getTokens } from "@/modules/auth";
 
 export async function GET() {
   try {
@@ -13,6 +13,15 @@ export async function GET() {
       );
 
     return NextResponse.json({ success: true, tokens });
+  } catch (error) {
+    return NextResponse.json({ success: false, error });
+  }
+}
+
+export async function DELETE() {
+  try {
+    await deleteTokens();
+    return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error });
   }
