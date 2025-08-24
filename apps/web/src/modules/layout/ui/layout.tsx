@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Container, Logo } from "@repo/components/ui";
-import { Header } from "@repo/components/widgets";
+import { Header, HeaderGroup } from "@repo/components/widgets/header";
 import Link from "next/link";
 
 import { APP_PATHS } from "@/modules/routing";
@@ -16,14 +16,14 @@ export const Layout: FC<LayoutProps> = async (props) => {
   return (
     <>
       <Header>
-        <Header.Group>
+        <HeaderGroup>
           <Link href={APP_PATHS.MAIN}>
             <Logo />
           </Link>
-        </Header.Group>
-        <Header.Group>
+        </HeaderGroup>
+        <HeaderGroup>
           <HeaderAuthGroup />
-        </Header.Group>
+        </HeaderGroup>
       </Header>
       <Container className={"pt-32"}>{props.children}</Container>
       <DynamicLayout />

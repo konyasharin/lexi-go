@@ -1,18 +1,16 @@
-import { FC, ReactNode } from "react";
+import { ChildrenOf } from "@/types";
+
+import { FC } from "react";
 
 import { HeaderGroup } from "./header-group";
 
 import { Container } from "@/ui";
 
 interface HeaderProps {
-  children?: ReactNode;
+  children?: ChildrenOf<typeof HeaderGroup>;
 }
 
-interface HeaderInnerComponents {
-  Group: typeof HeaderGroup;
-}
-
-const HeaderRoot: FC<HeaderProps> = (props) => {
+export const Header: FC<HeaderProps> = (props) => {
   return (
     <div
       className={
@@ -29,8 +27,3 @@ const HeaderRoot: FC<HeaderProps> = (props) => {
     </div>
   );
 };
-
-const Header = HeaderRoot as typeof HeaderRoot & HeaderInnerComponents;
-Header.Group = HeaderGroup;
-
-export { Header };

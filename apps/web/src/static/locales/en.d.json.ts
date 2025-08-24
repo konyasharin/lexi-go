@@ -11,6 +11,10 @@ declare const messages: {
     "SIGN_IN_WITH": "Sign in with {serviceName}",
     "SIGN_IN_SUCCESSFULLY": "Authorization was successfully"
   },
+  "HEADER_MENU": {
+    "EXIT": "Exit",
+    "SETTINGS": "Settings"
+  },
   "NOT_FOUND": {
     "TITLE": "Page not found"
   },

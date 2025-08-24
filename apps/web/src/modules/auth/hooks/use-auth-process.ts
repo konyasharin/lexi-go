@@ -20,7 +20,7 @@ export const useAuthProcess = (params: UseAuthProcessParams) => {
       (!params.jwt.accessToken && params.jwt.refreshToken) ||
       (params.jwt.accessToken && params.jwt.refreshToken && !params.isSetJwt) ||
       inProcessInfluence ||
-      isFirstRender
+      (isFirstRender && !params.isSetJwt)
     );
   }, [params, inProcessInfluence, isFirstRender]);
 
