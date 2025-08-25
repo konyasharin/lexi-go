@@ -30,7 +30,6 @@ export function middleware(request: NextRequest) {
   const refreshToken = cookies.get(process.env.NEXT_PUBLIC_JWT_REFRESH_KEY!);
   const isPathnameConfigured = isPathnameMatchAnyRoute(pathname);
 
-  console.log(pathname);
   if (
     !accessToken &&
     !refreshToken &&

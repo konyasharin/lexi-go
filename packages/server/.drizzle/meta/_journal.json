@@ -8,6 +8,13 @@
       "when": 1753178830130,
       "tag": "0000_bored_doomsday",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1756107356164,
+      "tag": "0001_closed_white_tiger",
+      "breakpoints": true
     }
   ]
 }
