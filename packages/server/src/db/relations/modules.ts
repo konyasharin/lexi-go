@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm";
 import {
   modulesTable,
   modulesToTags,
-  modulesToVocabularies,
+  modulesToVocabulariesTable,
   usersTable,
 } from "../tables";
 
@@ -12,6 +12,6 @@ export const modulesRelations = relations(modulesTable, ({ one, many }) => ({
     fields: [modulesTable.userId],
     references: [usersTable.id],
   }),
-  modulesToVocabularies: many(modulesToVocabularies),
+  modulesToVocabularies: many(modulesToVocabulariesTable),
   modulesToTags: many(modulesToTags),
 }));

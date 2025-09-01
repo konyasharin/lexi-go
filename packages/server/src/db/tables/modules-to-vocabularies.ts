@@ -3,7 +3,7 @@ import { integer, pgTable, primaryKey } from "drizzle-orm/pg-core";
 import { modulesTable } from "./modules";
 import { vocabulariesTable } from "./vocabularies";
 
-export const modulesToVocabularies = pgTable(
+export const modulesToVocabulariesTable = pgTable(
   "modules_to_vocabularies",
   {
     moduleId: integer("module_id")
