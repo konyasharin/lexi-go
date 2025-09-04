@@ -1,10 +1,12 @@
+import { Request } from "@/types";
+
 import axios, { AxiosResponse } from "axios";
 import jwt from "jsonwebtoken";
 
 import {
   badRequest,
   BaseController,
-  catchError,
+  controllerMethod,
   generatePassword,
   internalServerError,
   ok,
@@ -23,25 +25,24 @@ import { AuthService } from "./auth.service";
 export class AuthController extends BaseController {
   private readonly _authService = new AuthService();
 
-  @catchError
+  @controllerMethod
   public async registerUser(
-    data: CreateUserSchemaInfer,
+    req: Request<CreateUserSchemaInfer>,
   ): Promise<BaseResponseSchemaInfer> {
     const isAlreadyExists = !!(await this._authService.getUserIdByEmail(
-      data.email,
+      req.data.email,
     ));
     if (!isAlreadyExists) {
-      const newUser = await this._authService.createUser(data);
+      const newUser = await this._authService.createUser(req.data);
       if (newUser) return ok();
       return internalServerError();
     }
     return badRequest({ message: "User already exists" });
   }
 
-  @catchError
+  @controllerMethod
   public async authWithGoogle(
-    code: string,
-    resHeaders: Headers,
+    req: Request<string>,
   ): Promise<BaseResponseSchemaInfer> {
     const response: AxiosResponse<{ id_token: string }> = await axios.post(
       process.env.GOOGLE_HANDLE_TOKEN_URL!,
@@ -50,7 +51,7 @@ export class AuthController extends BaseController {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         grant_type: "authorization_code",
         redirect_uri: `${process.env.NEXT_PUBLIC_HOST!}${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_PATH}`,
-        code,
+        code: req.data,
       },
     );
 
@@ -74,23 +75,20 @@ export class AuthController extends BaseController {
 
       const user = await this._authService.getUserById(userId);
       if (!user) return internalServerError();
-      this._authService.setJwtCookie(user, resHeaders);
+      this._authService.setJwtCookie(user, req.headers);
       return ok();
     }
 
     return internalServerError();
   }
 
-  @catchError
-  public async refresh(
-    refreshToken: string,
-    resHeaders: Headers,
-  ): Promise<BaseResponseSchemaInfer> {
+  @controllerMethod
+  public async refresh(req: Request<string>): Promise<BaseResponseSchemaInfer> {
     const { exp, iat, ...data } = jwt.verify(
-      refreshToken,
+      req.data,
       process.env.JWT_REFRESH_SECRET!,
     ) as { exp: number; iat: number };
-    this._authService.setJwtCookie(data, resHeaders);
+    this._authService.setJwtCookie(data, req.headers);
     return ok();
   }
 }

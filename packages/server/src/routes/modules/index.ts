@@ -1,10 +1,19 @@
+import { createRequest } from "@/utils";
+
 import { ModulesController } from "./modules.controller";
-import { createModuleInputSchema } from "./modules.schemas";
+import { createModuleInputSchema, deleteModuleSchema } from "./modules.schemas";
 
 import { publicProcedure, router } from "@/trpc";
 
 export const modulesRouter = router({
-  createModule: publicProcedure
+  create: publicProcedure
     .input(createModuleInputSchema)
-    .mutation(async ({ input }) => await new ModulesController().create(input)),
+    .mutation(
+      async (opts) => await new ModulesController().create(createRequest(opts)),
+    ),
+  delete: publicProcedure
+    .input(deleteModuleSchema)
+    .mutation(
+      async (opts) => await new ModulesController().delete(createRequest(opts)),
+    ),
 });

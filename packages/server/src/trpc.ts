@@ -1,10 +1,12 @@
+import { Ctx } from "@/types";
+
 import { initTRPC } from "@trpc/server";
 
 /**
  * Initialization of tRPC backend
  * Should be done only once per backend!
  */
-const t = initTRPC.context<{ resHeaders: Headers }>().create();
+const t = initTRPC.context<Ctx>().create();
 
 /**
  * Export reusable router and procedure helpers

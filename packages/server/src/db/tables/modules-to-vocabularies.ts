@@ -8,10 +8,10 @@ export const modulesToVocabulariesTable = pgTable(
   {
     moduleId: integer("module_id")
       .notNull()
-      .references(() => modulesTable.id),
+      .references(() => modulesTable.id, { onDelete: "cascade" }),
     vocabularyId: integer("vocabulary_id")
       .notNull()
-      .references(() => vocabulariesTable.id),
+      .references(() => vocabulariesTable.id, { onDelete: "cascade" }),
   },
   (t) => [primaryKey({ columns: [t.moduleId, t.vocabularyId] })],
 );

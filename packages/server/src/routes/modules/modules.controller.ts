@@ -1,4 +1,15 @@
-import { BaseController, catchError, internalServerError, ok } from "@/utils";
+import { Request } from "@/types";
+
+import {
+  auth,
+  BaseController,
+  controllerMethod,
+  forbidden,
+  getUserPublic,
+  internalServerError,
+  notFound,
+  ok,
+} from "@/utils";
 
 import { TagsService } from "../tags";
 import { VocabulariesService } from "../vocabularies";
@@ -6,7 +17,7 @@ import { VocabulariesService } from "../vocabularies";
 import {
   CreateModuleInputSchemaInfer,
   CreateModuleResponseSchemaInfer,
-  CreateModuleSchemaInfer,
+  DeleteModuleSchemaInfer,
 } from "./modules.schemas";
 import { ModulesService } from "./modules.service";
 
@@ -15,26 +26,32 @@ export class ModulesController extends BaseController {
   private _vocabulariesService = new VocabulariesService();
   private _tagsService = new TagsService();
 
-  @catchError
+  @controllerMethod
+  @auth
   public async create(
-    data: CreateModuleInputSchemaInfer,
+    req: Request<CreateModuleInputSchemaInfer>,
   ): Promise<CreateModuleResponseSchemaInfer> {
+    const user = getUserPublic(req.headers);
+
     const result = await this.db.transaction(async (tx) => {
-      const newModuleId = await this._modulesService.create(data, tx);
+      const newModuleId = await this._modulesService.create(
+        { ...req.data, userId: user.id },
+        tx,
+      );
 
       if (!newModuleId) return internalServerError();
 
       await this._vocabulariesService.createWithAttach(
         {
           moduleId: newModuleId,
-          vocabularies: data.vocabularies,
+          vocabularies: req.data.vocabularies,
         },
         tx,
       );
       await this._tagsService.createOnlyNew(
         {
-          userId: data.userId,
-          tags: data.tags,
+          userId: user.id,
+          tags: req.data.tags,
         },
         tx,
       );
@@ -43,5 +60,25 @@ export class ModulesController extends BaseController {
     });
 
     return ok({ moduleId: result });
+  }
+
+  @controllerMethod
+  @auth
+  public async delete(req: Request<DeleteModuleSchemaInfer>) {
+    const user = getUserPublic(req.headers);
+
+    const isModuleExists = !!(await this._modulesService.getModuleById(
+      req.data.id,
+    ));
+    if (!isModuleExists) return notFound();
+
+    const isMyModule = await this._modulesService.isMyModule({
+      moduleId: req.data.id,
+      userId: user.id,
+    });
+    if (!isMyModule) return forbidden();
+
+    await this._modulesService.delete(req.data);
+    return ok();
   }
 }

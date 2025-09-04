@@ -1,4 +1,4 @@
-import { Test } from "@/modules/vocabularyModules/ui/test";
+import { Test } from "@/modules/vocabulary-modules/ui/test";
 
 export default async function Modules() {
   return <Test />;

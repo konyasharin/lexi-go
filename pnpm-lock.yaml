@@ -26,6 +26,9 @@ importers:
       '@repo/components':
         specifier: workspace:*
         version: link:../../packages/components
+      '@repo/server':
+        specifier: workspace:*
+        version: link:../../packages/server
       '@siberiacancode/reactuse':
         specifier: ^0.2.29
         version: 0.2.29(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -75,9 +78,6 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@repo/server':
-        specifier: workspace:*
-        version: link:../../packages/server
       '@repo/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config

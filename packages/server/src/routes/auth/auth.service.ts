@@ -1,12 +1,12 @@
 import { BaseService, Cookie, generateJwt, getJwtExpiresTime } from "@/utils";
 
-import { usersTable } from "@/db";
+import { TransactionType, usersTable } from "@/db";
 
 import { CreateUserSchemaInfer, UserSchemaInfer } from "./auth.schemas";
 
 export class AuthService extends BaseService {
-  public async createUser(data: CreateUserSchemaInfer) {
-    const newUserId = await this.db
+  public async createUser(data: CreateUserSchemaInfer, tx?: TransactionType) {
+    const newUserId = await this.getClient(tx)
       .insert(usersTable)
       .values(data)
       .returning({ id: usersTable.id });
@@ -25,7 +25,7 @@ export class AuthService extends BaseService {
   }
 
   public async getUserById(id: UserSchemaInfer["id"]) {
-    return await this.db.query.usersTable.findFirst({
+    return this.db.query.usersTable.findFirst({
       where: (user, { eq }) => eq(user.id, id),
       columns: {
         password: false,

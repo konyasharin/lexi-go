@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createRequest } from "@/utils";
+
 import { AuthController } from "./auth.controller";
 import { createUserSchema } from "./auth.schemas";
 
@@ -10,18 +12,18 @@ export const authRouter = router({
   registerUser: publicProcedure
     .input(createUserSchema)
     .mutation(
-      async ({ input }) => await new AuthController().registerUser(input),
+      async (opts) =>
+        await new AuthController().registerUser(createRequest(opts)),
     ),
   authWithGoogle: publicProcedure
     .input(z.string())
     .mutation(
-      async ({ input, ctx }) =>
-        await new AuthController().authWithGoogle(input, ctx.resHeaders),
+      async (opts) =>
+        await new AuthController().authWithGoogle(createRequest(opts)),
     ),
   refresh: publicProcedure
     .input(z.string())
     .mutation(
-      async ({ input, ctx }) =>
-        await new AuthController().refresh(input, ctx.resHeaders),
+      async (opts) => await new AuthController().refresh(createRequest(opts)),
     ),
 });

@@ -18,18 +18,29 @@ export const createModuleSchema = moduleSchema.pick({
   description: true,
 });
 
-export const createModuleInputSchema = createModuleSchema.and(
-  z.object({
-    vocabularies: createVocabulariesSchema,
-    tags: createTagsSchema.shape.tags,
-  }),
-);
+export const createModuleInputSchema = createModuleSchema
+  .omit({ userId: true })
+  .and(
+    z.object({
+      vocabularies: createVocabulariesSchema,
+      tags: createTagsSchema.shape.tags,
+    }),
+  );
 
 export const createModuleResponseSchema = baseResponseSchema.and(
   z.object({
     moduleId: z.number(),
   }),
 );
+
+export const deleteModuleSchema = moduleSchema.pick({
+  id: true,
+});
+
+export const isMyModuleSchema = z.object({
+  moduleId: z.number(),
+  userId: z.number(),
+});
 
 export type ModuleSchemaInfer = z.infer<typeof moduleSchema>;
 export type CreateModuleSchemaInfer = z.infer<typeof createModuleSchema>;
@@ -39,3 +50,5 @@ export type CreateModuleInputSchemaInfer = z.infer<
 export type CreateModuleResponseSchemaInfer = z.infer<
   typeof createModuleResponseSchema
 >;
+export type DeleteModuleSchemaInfer = z.infer<typeof deleteModuleSchema>;
+export type IsMyModuleSchemaInfer = z.infer<typeof isMyModuleSchema>;

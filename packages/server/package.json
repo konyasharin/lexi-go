@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./types": "./dist/types/index.js"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
