@@ -1,5 +1,4 @@
-export * from "./base-controller";
-export * from "./base-service";
+export * from "./base-classes";
 export * from "./cookie";
 export * from "./create-request";
 export * from "./decorators";

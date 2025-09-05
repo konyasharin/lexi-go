@@ -1,14 +1,17 @@
 import { relations } from "drizzle-orm";
 
-import { modulesTable, modulesToTags, tagsTable } from "../tables";
+import { modulesTable, modulesToTagsTable, tagsTable } from "../tables";
 
-export const modulesToTagsRelations = relations(modulesToTags, ({ one }) => ({
-  module: one(modulesTable, {
-    fields: [modulesToTags.moduleId],
-    references: [modulesTable.id],
+export const modulesToTagsRelations = relations(
+  modulesToTagsTable,
+  ({ one }) => ({
+    module: one(modulesTable, {
+      fields: [modulesToTagsTable.moduleId],
+      references: [modulesTable.id],
+    }),
+    tag: one(tagsTable, {
+      fields: [modulesToTagsTable.tagId],
+      references: [tagsTable.id],
+    }),
   }),
-  tag: one(tagsTable, {
-    fields: [modulesToTags.tagId],
-    references: [tagsTable.id],
-  }),
-}));
+);

@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX "unique_modules_user_name" ON "modules" USING btree ("user_id","name");--> statement-breakpoint
+CREATE UNIQUE INDEX "unique_tags_user_name" ON "tags" USING btree ("user_id","name");

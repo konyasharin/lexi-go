@@ -15,11 +15,10 @@ export const Test: FC = () => {
   // useEffect(() => {
   //   if (!authContext?.auth.user) return;
   //   createModuleController.mutate({
-  //     userId: authContext.auth.user.id,
-  //     name: "test",
+  //     name: "test123",
   //     description: "test",
   //     vocabularies: [{ word: "test", translation: "test" }],
-  //     tags: [],
+  //     tags: [{ id: 9, name: "test", color: "#ffffff" }],
   //   });
   // }, []);
 
@@ -30,7 +29,7 @@ export const Test: FC = () => {
   useEffect(() => {
     if (!authContext?.auth.user) return;
     deleteModuleController.mutate({
-      id: 4,
+      id: 16,
     });
   }, []);
 

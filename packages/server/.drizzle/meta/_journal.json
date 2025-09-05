@@ -15,6 +15,13 @@
       "when": 1756725343315,
       "tag": "0001_fresh_lila_cheney",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1757001852201,
+      "tag": "0002_real_war_machine",
+      "breakpoints": true
     }
   ]
 }

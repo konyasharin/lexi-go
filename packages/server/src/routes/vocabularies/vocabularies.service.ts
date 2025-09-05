@@ -1,3 +1,5 @@
+import { inArray } from "drizzle-orm";
+
 import { BaseService } from "@/utils";
 
 import {
@@ -10,6 +12,8 @@ import {
   AttachVocabulariesToModuleSchemaInfer,
   CreateVocabulariesSchemaInfer,
   CreateVocabulariesWithAttachSchemaInfer,
+  DeleteVocabulariesSchemaInfer,
+  GetModuleVocabulariesSchemaInfer,
 } from "./vocabularies.schemas";
 
 export class VocabulariesService extends BaseService {
@@ -17,17 +21,29 @@ export class VocabulariesService extends BaseService {
     data: CreateVocabulariesSchemaInfer,
     tx?: TransactionType,
   ) {
-    return this.getClient(tx)
+    return this.client
+      .get(tx)
       .insert(vocabulariesTable)
       .values(data)
       .returning();
+  }
+
+  public async delete(
+    data: DeleteVocabulariesSchemaInfer,
+    tx?: TransactionType,
+  ) {
+    return this.client
+      .get(tx)
+      .delete(vocabulariesTable)
+      .where(inArray(vocabulariesTable.id, data.vocabulariesId));
   }
 
   public async attachToModule(
     data: AttachVocabulariesToModuleSchemaInfer,
     tx?: TransactionType,
   ) {
-    return this.getClient(tx)
+    return this.client
+      .get(tx)
       .insert(modulesToVocabulariesTable)
       .values(
         data.vocabulariesId.map((vocabularyId) => ({
@@ -51,5 +67,18 @@ export class VocabulariesService extends BaseService {
     );
 
     return newVocabularies;
+  }
+
+  public async getModuleVocabularies(data: GetModuleVocabulariesSchemaInfer) {
+    const vocabulariesId = (
+      await this.client.db.query.modulesToVocabulariesTable.findMany({
+        where: (pair, { eq }) => eq(pair.moduleId, data.moduleId),
+      })
+    ).map((pair) => pair.vocabularyId);
+
+    return this.client.db.query.vocabulariesTable.findMany({
+      where: (vocabulary, { inArray }) =>
+        inArray(vocabulary.id, vocabulariesId),
+    });
   }
 }

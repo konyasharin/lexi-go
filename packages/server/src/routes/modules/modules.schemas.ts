@@ -37,10 +37,21 @@ export const deleteModuleSchema = moduleSchema.pick({
   id: true,
 });
 
+export const getModuleByIdSchema = moduleSchema.pick({
+  id: true,
+});
+
 export const isMyModuleSchema = z.object({
   moduleId: z.number(),
   userId: z.number(),
 });
+
+export const getUserOwnedSchema = z.object({
+  userId: z.number(),
+  tagsId: z.optional(z.number().array()),
+});
+
+export const connectAdditionalInfoSchema = moduleSchema;
 
 export type ModuleSchemaInfer = z.infer<typeof moduleSchema>;
 export type CreateModuleSchemaInfer = z.infer<typeof createModuleSchema>;
@@ -51,4 +62,9 @@ export type CreateModuleResponseSchemaInfer = z.infer<
   typeof createModuleResponseSchema
 >;
 export type DeleteModuleSchemaInfer = z.infer<typeof deleteModuleSchema>;
+export type GetModuleByIdSchemaInfer = z.infer<typeof getModuleByIdSchema>;
 export type IsMyModuleSchemaInfer = z.infer<typeof isMyModuleSchema>;
+export type GetUserOwnedSchemaInfer = z.infer<typeof getUserOwnedSchema>;
+export type ConnectAdditionalInfoSchemaInfer = z.infer<
+  typeof connectAdditionalInfoSchema
+>;

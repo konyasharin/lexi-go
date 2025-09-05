@@ -1,5 +1,5 @@
 import { db as drizzleDb } from "@/db";
 
-export class BaseController {
+export abstract class BaseController {
   protected db = drizzleDb;
 }

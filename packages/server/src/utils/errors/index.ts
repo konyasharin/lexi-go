@@ -1,4 +1,5 @@
 export * from "./bad-request";
+export * from "./conflict";
 export * from "./error";
 export * from "./forbidden";
 export * from "./internal-server-error";

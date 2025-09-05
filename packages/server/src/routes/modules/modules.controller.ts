@@ -48,10 +48,11 @@ export class ModulesController extends BaseController {
         },
         tx,
       );
-      await this._tagsService.createOnlyNew(
+      await this._tagsService.createWithAttach(
         {
           userId: user.id,
           tags: req.data.tags,
+          moduleId: newModuleId,
         },
         tx,
       );
@@ -66,19 +67,33 @@ export class ModulesController extends BaseController {
   @auth
   public async delete(req: Request<DeleteModuleSchemaInfer>) {
     const user = getUserPublic(req.headers);
-
-    const isModuleExists = !!(await this._modulesService.getModuleById(
-      req.data.id,
-    ));
-    if (!isModuleExists) return notFound();
-
-    const isMyModule = await this._modulesService.isMyModule({
-      moduleId: req.data.id,
-      userId: user.id,
+    const module = await this._modulesService.getById({
+      id: req.data.id,
     });
+    if (!module) return notFound();
+
+    const fullModule = await this._modulesService.connectAdditionalInfo(module);
+
+    const isMyModule = user.id === fullModule.userId;
     if (!isMyModule) return forbidden();
 
-    await this._modulesService.delete(req.data);
-    return ok();
+    return await this.db.transaction(async (tx) => {
+      await this._modulesService.delete(req.data, tx);
+      await this._vocabulariesService.delete(
+        {
+          vocabulariesId: fullModule.vocabularies.map((v) => v.id),
+        },
+        tx,
+      );
+
+      const tagsToDelete = await this._tagsService.getNotAttachedUserTags({
+        userId: user.id,
+        excludeModulesId: [fullModule.id],
+      });
+      if (tagsToDelete.length)
+        await this._tagsService.delete({ tagsId: tagsToDelete }, tx);
+
+      return ok();
+    });
   }
 }

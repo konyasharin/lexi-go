@@ -6,7 +6,8 @@ import { CreateUserSchemaInfer, UserSchemaInfer } from "./auth.schemas";
 
 export class AuthService extends BaseService {
   public async createUser(data: CreateUserSchemaInfer, tx?: TransactionType) {
-    const newUserId = await this.getClient(tx)
+    const newUserId = await this.client
+      .get(tx)
       .insert(usersTable)
       .values(data)
       .returning({ id: usersTable.id });
@@ -15,7 +16,7 @@ export class AuthService extends BaseService {
 
   public async getUserIdByEmail(email: UserSchemaInfer["email"]) {
     return (
-      await this.db.query.usersTable.findFirst({
+      await this.client.db.query.usersTable.findFirst({
         where: (user, { eq }) => eq(user.email, email),
         columns: {
           id: true,
@@ -25,7 +26,7 @@ export class AuthService extends BaseService {
   }
 
   public async getUserById(id: UserSchemaInfer["id"]) {
-    return this.db.query.usersTable.findFirst({
+    return this.client.db.query.usersTable.findFirst({
       where: (user, { eq }) => eq(user.id, id),
       columns: {
         password: false,

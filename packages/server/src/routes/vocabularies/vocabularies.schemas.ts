@@ -23,6 +23,14 @@ export const createVocabulariesWithAttachSchema = z.object({
   moduleId: z.number(),
 });
 
+export const getModuleVocabulariesSchema = z.object({
+  moduleId: z.number(),
+});
+
+export const deleteVocabulariesSchema = z.object({
+  vocabulariesId: z.number().array(),
+});
+
 export type VocabularySchemaInfer = z.infer<typeof vocabularySchema>;
 export type CreateVocabulariesSchemaInfer = z.infer<
   typeof createVocabulariesSchema
@@ -32,4 +40,10 @@ export type AttachVocabulariesToModuleSchemaInfer = z.infer<
 >;
 export type CreateVocabulariesWithAttachSchemaInfer = z.infer<
   typeof createVocabulariesWithAttachSchema
+>;
+export type GetModuleVocabulariesSchemaInfer = z.infer<
+  typeof getModuleVocabulariesSchema
+>;
+export type DeleteVocabulariesSchemaInfer = z.infer<
+  typeof deleteVocabulariesSchema
 >;
