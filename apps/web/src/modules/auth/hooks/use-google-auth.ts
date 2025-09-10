@@ -1,19 +1,15 @@
 import { useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { APP_PATHS } from "@/modules/routing";
-import { useTRPC } from "@/modules/trpc";
 
 import { useAuth } from "./use-auth";
+import { useGoogleCodeController } from "./use-google-code-controller";
 
 export const useGoogleAuth = (auth: ReturnType<typeof useAuth>) => {
-  const trpc = useTRPC();
-  const handleCodeController = useMutation(
-    trpc.auth.authWithGoogle.mutationOptions(),
-  );
+  const handleCodeController = useGoogleCodeController();
   const searchParams = useSearchParams();
   const router = useRouter();
   const t = useTranslations();

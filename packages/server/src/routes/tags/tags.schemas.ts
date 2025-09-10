@@ -9,10 +9,7 @@ export const tagSchema = z.object({
 
 export const createTagsSchema = z.object({
   userId: z.number(),
-  tags: tagSchema
-    .pick({ name: true, color: true })
-    .and(z.object({ id: z.optional(z.number()) }))
-    .array(),
+  tags: tagSchema.pick({ name: true, color: true }).array(),
 });
 
 export const attachTagsToModuleSchema = z.object({
@@ -20,11 +17,12 @@ export const attachTagsToModuleSchema = z.object({
   tagsId: z.number().array(),
 });
 
-export const createTagsWithAttachSchema = createTagsSchema.and(
-  z.object({
-    moduleId: z.number(),
-  }),
-);
+export const createTagsWithAttachSchema = z.object({
+  userId: z.number(),
+  moduleId: z.number(),
+  newTags: createTagsSchema.shape.tags,
+  userTags: tagSchema.pick({ id: true }).array(),
+});
 
 export const getUserTagsSchema = z.object({
   userId: z.number(),

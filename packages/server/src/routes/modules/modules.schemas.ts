@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTagsSchema } from "@/routes/tags";
+import { createTagsSchema, tagSchema } from "@/routes/tags";
 import { createVocabulariesSchema } from "@/routes/vocabularies";
 
 import { baseResponseSchema } from "../schemas";
@@ -23,7 +23,8 @@ export const createModuleInputSchema = createModuleSchema
   .and(
     z.object({
       vocabularies: createVocabulariesSchema,
-      tags: createTagsSchema.shape.tags,
+      newTags: createTagsSchema.shape.tags,
+      userTags: tagSchema.pick({ id: true }).array(),
     }),
   );
 

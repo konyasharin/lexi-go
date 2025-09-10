@@ -1,21 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 import jwtUtils from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 
 import { APP_PATHS } from "@/modules/routing";
-import { useTRPC } from "@/modules/trpc";
 
 import { HEAD_START_REFRESH_TIME } from "../constants";
 import { GetTokensAwaited, jwtSchema, UserSchemaInfer } from "../types";
 
 import { useDeleteTokensController } from "./use-delete-tokens-controller";
 import { useGetTokensController } from "./use-get-tokens-controller";
+import { useRefreshController } from "./use-refresh-controller";
 
 export const useAuth = (jwt: GetTokensAwaited) => {
   const router = useRouter();
-  const trpc = useTRPC();
-  const refreshController = useMutation(trpc.auth.refresh.mutationOptions());
+  const refreshController = useRefreshController();
   const getTokensController = useGetTokensController();
   const deleteTokensController = useDeleteTokensController();
   const [currentJwt, setCurrentJwt] = useState<GetTokensAwaited>(jwt);

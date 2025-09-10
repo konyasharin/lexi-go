@@ -51,7 +51,8 @@ export class ModulesController extends BaseController {
       await this._tagsService.createWithAttach(
         {
           userId: user.id,
-          tags: req.data.tags,
+          newTags: req.data.newTags,
+          userTags: req.data.userTags,
           moduleId: newModuleId,
         },
         tx,

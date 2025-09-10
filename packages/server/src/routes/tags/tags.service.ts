@@ -12,17 +12,15 @@ import {
   GetModuleTagsSchemaInfer,
   GetNotAttachedUserTagsInfer,
   GetUserTagsSchemaInfer,
+  TagSchemaInfer,
 } from "./tags.schemas";
 
 export class TagsService extends BaseService {
   public async create(data: CreateTagsSchema, tx?: TransactionType) {
-    const tagsToCreate = data.tags.filter((tag) => !tag.id);
-    if (!tagsToCreate.length) return [];
-
     return this.client
       .get(tx)
       .insert(tagsTable)
-      .values(tagsToCreate.map((tag) => ({ ...tag, userId: data.userId })))
+      .values(data.tags.map((tag) => ({ ...tag, userId: data.userId })))
       .returning();
   }
 
@@ -47,11 +45,17 @@ export class TagsService extends BaseService {
     data: CreateTagsWithAttachSchemaInfer,
     tx?: TransactionType,
   ) {
-    const newTags = await this.create(data, tx);
+    const newTags: TagSchemaInfer[] = [];
+
+    if (data.newTags.length > 0) {
+      newTags.concat(
+        await this.create({ userId: data.userId, tags: data.newTags }, tx),
+      );
+    }
 
     const tagsToAttach = [
       ...newTags.map((tag) => tag.id),
-      ...data.tags.filter((tag) => !!tag.id).map((tag) => tag.id as number),
+      ...data.userTags.map((tag) => tag.id),
     ];
     if (tagsToAttach.length > 0) {
       await this.attachToModule(

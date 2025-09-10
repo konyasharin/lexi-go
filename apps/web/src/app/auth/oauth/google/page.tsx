@@ -1,13 +1,13 @@
 "use client";
 
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
-import { AuthContext } from "@/modules/auth";
+import { useAuthContext } from "@/modules/auth";
 
 import { BaseLoader } from "@/shared/ui";
 
 export default function GoogleOauth() {
-  const context = useContext(AuthContext);
+  const context = useAuthContext();
 
   useEffect(() => {
     context?.authProcess.setInProcessInfluence(true);

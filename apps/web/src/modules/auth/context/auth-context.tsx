@@ -10,7 +10,7 @@ interface AuthContextProviderProps extends GetTokensAwaited {
   children?: ReactNode;
 }
 
-interface AuthContext {
+export interface AuthContext {
   auth: ReturnType<typeof useAuth>;
   googleAuth: ReturnType<typeof useGoogleAuth>;
   authProcess: ReturnType<typeof useAuthProcess>;

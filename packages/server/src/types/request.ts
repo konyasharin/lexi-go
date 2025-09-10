@@ -1,4 +1,4 @@
-export interface Request<TData> {
+export interface Request<TData = undefined> {
   data: TData;
   headers: Headers;
 }

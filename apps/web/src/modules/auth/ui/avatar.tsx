@@ -1,20 +1,20 @@
 "use client";
 
-import { FC, useContext } from "react";
+import { FC } from "react";
 import {
   Avatar as ShadcnAvatar,
   AvatarFallback,
 } from "@repo/components/shadcn";
 import clsx from "clsx";
 
-import { AuthContext } from "@/modules/auth";
+import { useAuthContext } from "../hooks";
 
 interface AvatarProps {
   className?: string;
 }
 
 export const Avatar: FC<AvatarProps> = (props) => {
-  const authContext = useContext(AuthContext);
+  const authContext = useAuthContext();
 
   if (authContext?.auth.user)
     return (
