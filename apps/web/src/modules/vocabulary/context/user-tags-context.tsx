@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, FC, ReactNode } from "react";
 
 import { useUserTags } from "../hooks";

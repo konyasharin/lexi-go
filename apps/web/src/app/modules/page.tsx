@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  TagsInput,
-  UserTagsContextProvider,
-  useTagsInput,
-} from "@/modules/vocabulary";
+import { TagsInput, UserTagsContextProvider } from "@/modules/vocabulary";
+import { useTagsInput } from "@/modules/vocabulary/client";
 
 export default function Modules() {
   const controller = useTagsInput();
