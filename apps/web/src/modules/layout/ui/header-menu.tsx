@@ -7,7 +7,7 @@ import { Menu, MenuItemContent } from "@repo/components/widgets/menu";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { useAuthContext } from "@/modules/auth";
+import { useAuthContext } from "@/modules/auth/client";
 import { APP_PATHS } from "@/modules/routing";
 
 interface HeaderMenuProps {

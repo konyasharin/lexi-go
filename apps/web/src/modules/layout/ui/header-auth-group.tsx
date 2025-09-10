@@ -5,7 +5,8 @@ import { Button, Skeleton } from "@repo/components/shadcn";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { Avatar, useAuthContext } from "@/modules/auth";
+import { Avatar } from "@/modules/auth";
+import { useAuthContext } from "@/modules/auth/client";
 import { APP_PATHS } from "@/modules/routing";
 
 import { HeaderMenu } from "./header-menu";

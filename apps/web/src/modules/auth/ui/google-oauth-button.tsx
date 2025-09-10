@@ -4,7 +4,7 @@ import { FC } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@repo/components/shadcn";
 
-import { useAuthContext } from "@/modules/auth";
+import { useAuthContext } from "@/modules/auth/client";
 
 interface GoogleOauthButtonProps {
   children?: string;

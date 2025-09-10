@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { useAuthContext } from "@/modules/auth";
+import { useAuthContext } from "@/modules/auth/client";
 
 import { BaseLoader } from "@/shared/ui";
 
