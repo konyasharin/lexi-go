@@ -1,4 +1,4 @@
-import { BaseResponseSchemaInfer } from "@/routes";
+import { BaseResponseSchemaInfer } from "@repo/entities/shared";
 
 export const ok = <T = undefined>(result?: T) => {
   return {

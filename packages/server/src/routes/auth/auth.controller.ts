@@ -1,5 +1,10 @@
 import { Request } from "@/types";
 
+import { BaseResponseSchemaInfer } from "@repo/entities/shared";
+import {
+  CreateUserDataSchemaInfer,
+  GoogleUserInfoSchemaInfer,
+} from "@repo/entities/user";
 import axios, { AxiosResponse } from "axios";
 import jwt from "jsonwebtoken";
 
@@ -14,12 +19,6 @@ import {
 
 import "dotenv/config";
 
-import { BaseResponseSchemaInfer } from "../schemas";
-
-import {
-  CreateUserSchemaInfer,
-  GoogleUserInfoSchemaInfer,
-} from "./auth.schemas";
 import { AuthService } from "./auth.service";
 
 export class AuthController extends BaseController {
@@ -27,11 +26,11 @@ export class AuthController extends BaseController {
 
   @controllerMethod
   public async registerUser(
-    req: Request<CreateUserSchemaInfer>,
+    req: Request<CreateUserDataSchemaInfer>,
   ): Promise<BaseResponseSchemaInfer> {
-    const isAlreadyExists = !!(await this._authService.getUserIdByEmail(
-      req.data.email,
-    ));
+    const isAlreadyExists = !!(await this._authService.getUserIdByEmail({
+      email: req.data.email,
+    }));
     if (!isAlreadyExists) {
       const newUser = await this._authService.createUser(req.data);
       if (newUser) return ok();
@@ -60,9 +59,9 @@ export class AuthController extends BaseController {
         response.data.id_token,
       ) as GoogleUserInfoSchemaInfer;
 
-      let userId = await this._authService.getUserIdByEmail(
-        googleUserInfo.email,
-      );
+      let userId = await this._authService.getUserIdByEmail({
+        email: googleUserInfo.email,
+      });
 
       if (!userId) {
         const newUser = await this._authService.createUser({
@@ -73,7 +72,7 @@ export class AuthController extends BaseController {
         else return internalServerError();
       }
 
-      const user = await this._authService.getUserById(userId);
+      const user = await this._authService.getUserById({ id: userId });
       if (!user) return internalServerError();
       this._authService.setJwtCookie(user, req.headers);
       return ok();

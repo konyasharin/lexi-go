@@ -6,3 +6,4 @@ export * from "./label";
 export * from "./popover";
 export * from "./skeleton";
 export * from "./sonner";
+export * from "./textarea";

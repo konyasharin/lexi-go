@@ -1,11 +1,10 @@
+import { userPublicSchema } from "@repo/entities/user";
 import { z } from "zod";
-
-import { userSchema } from "./user.schema";
 
 export const jwtSchema = z
   .object({
     exp: z.number(),
   })
-  .and(userSchema);
+  .and(userPublicSchema);
 
 export type JwtSchemaInfer = z.infer<typeof jwtSchema>;

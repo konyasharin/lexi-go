@@ -12,7 +12,9 @@
     "check-types": "tsc --noEmit --pretty"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
     "@repo/components": "workspace:*",
+    "@repo/entities": "workspace:*",
     "@repo/server": "workspace:*",
     "@siberiacancode/reactuse": "^0.2.29",
     "@tanstack/react-query": "^5.83.0",
@@ -26,6 +28,7 @@
     "next-intl": "^4.3.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
     "sonner": "^2.0.7",
     "zod": "^4.0.5"

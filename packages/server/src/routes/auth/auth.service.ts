@@ -1,11 +1,18 @@
+import { IdSchemaInfer } from "@repo/entities/shared";
+import {
+  CreateUserDataSchemaInfer,
+  GetUserByEmailDataSchemaInfer,
+} from "@repo/entities/user";
+
 import { BaseService, Cookie, generateJwt, getJwtExpiresTime } from "@/utils";
 
 import { TransactionType, usersTable } from "@/db";
 
-import { CreateUserSchemaInfer, UserSchemaInfer } from "./auth.schemas";
-
 export class AuthService extends BaseService {
-  public async createUser(data: CreateUserSchemaInfer, tx?: TransactionType) {
+  public async createUser(
+    data: CreateUserDataSchemaInfer,
+    tx?: TransactionType,
+  ) {
     const newUserId = await this.client
       .get(tx)
       .insert(usersTable)
@@ -14,10 +21,10 @@ export class AuthService extends BaseService {
     return newUserId[0];
   }
 
-  public async getUserIdByEmail(email: UserSchemaInfer["email"]) {
+  public async getUserIdByEmail(data: GetUserByEmailDataSchemaInfer) {
     return (
       await this.client.db.query.usersTable.findFirst({
-        where: (user, { eq }) => eq(user.email, email),
+        where: (user, { eq }) => eq(user.email, data.email),
         columns: {
           id: true,
         },
@@ -25,9 +32,9 @@ export class AuthService extends BaseService {
     )?.id;
   }
 
-  public async getUserById(id: UserSchemaInfer["id"]) {
+  public async getUserById(data: IdSchemaInfer) {
     return this.client.db.query.usersTable.findFirst({
-      where: (user, { eq }) => eq(user.id, id),
+      where: (user, { eq }) => eq(user.id, data.id),
       columns: {
         password: false,
       },

@@ -1,8 +1,7 @@
+import { userPublicSchema } from "@repo/entities/user";
 import jwt from "jsonwebtoken";
 
 import { unauthorized } from "@/utils/errors";
-
-import { userPublicSchema } from "@/routes";
 
 export const getUserPublic = (headers: Headers) => {
   const authHeader = headers.get("Authorization");

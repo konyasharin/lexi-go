@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { UserPublicSchemaInfer } from "@repo/entities/user";
 import jwtUtils from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 
 import { APP_PATHS } from "@/modules/routing";
 
 import { HEAD_START_REFRESH_TIME } from "../constants";
-import { GetTokensAwaited, jwtSchema, UserSchemaInfer } from "../types";
+import { GetTokensAwaited, jwtSchema } from "../types";
 
 import { useDeleteTokensController } from "./use-delete-tokens-controller";
 import { useGetTokensController } from "./use-get-tokens-controller";
@@ -57,7 +58,7 @@ export const useAuth = (jwt: GetTokensAwaited) => {
     return newTokenData;
   }, [currentJwt]);
 
-  const user = useMemo<UserSchemaInfer | null>(() => {
+  const user = useMemo<UserPublicSchemaInfer | null>(() => {
     if (!tokenData) return null;
     return {
       id: tokenData.id,

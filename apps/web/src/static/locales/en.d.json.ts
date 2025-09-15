@@ -18,6 +18,13 @@ declare const messages: {
   "NOT_FOUND": {
     "TITLE": "Page not found"
   },
+  "MODULE_FORM": {
+    "NAME": "Module name",
+    "DESCRIPTION": "Module description",
+    "TAGS": "Module tags",
+    "WORD": "Word",
+    "TRANSLATION": "Translation"
+  },
   "COMMON": {
     "SOMETHING_ERROR": "Something went wrong...",
     "LOADING": "Loading. Wait a few time..."

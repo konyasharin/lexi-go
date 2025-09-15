@@ -1,16 +1,15 @@
+import { createUserDataSchema } from "@repo/entities/user";
 import { z } from "zod";
 
 import { createRequest } from "@/utils";
 
 import { AuthController } from "./auth.controller";
-import { createUserSchema } from "./auth.schemas";
 
 import { publicProcedure, router } from "@/trpc";
 
-export * from "./auth.schemas";
 export const authRouter = router({
   registerUser: publicProcedure
-    .input(createUserSchema)
+    .input(createUserDataSchema)
     .mutation(
       async (opts) =>
         await new AuthController().registerUser(createRequest(opts)),

@@ -1,22 +1,21 @@
+import { IdSchemaInfer } from "@repo/entities/shared";
+import {
+  AttachTagsToModuleDataSchemaInfer,
+  CreateTagsDataSchemaInfer,
+  CreateTagsWithAttachDataSchemaInfer,
+  DeleteTagsDataSchemaInfer,
+  GetNotAttachedTagsDataInfer,
+  TagSchemaInfer,
+  tagToModuleFormat,
+} from "@repo/entities/tag";
 import { inArray } from "drizzle-orm";
 
 import { BaseService } from "@/utils";
 
 import { modulesToTagsTable, tagsTable, TransactionType } from "@/db";
 
-import {
-  AttachTagsToModuleSchemaInfer,
-  CreateTagsSchema,
-  CreateTagsWithAttachSchemaInfer,
-  DeleteTagsSchemaInfer,
-  GetModuleTagsSchemaInfer,
-  GetNotAttachedUserTagsInfer,
-  GetUserTagsSchemaInfer,
-  TagSchemaInfer,
-} from "./tags.schemas";
-
 export class TagsService extends BaseService {
-  public async create(data: CreateTagsSchema, tx?: TransactionType) {
+  public async create(data: CreateTagsDataSchemaInfer, tx?: TransactionType) {
     return this.client
       .get(tx)
       .insert(tagsTable)
@@ -24,7 +23,7 @@ export class TagsService extends BaseService {
       .returning();
   }
 
-  public async delete(data: DeleteTagsSchemaInfer, tx?: TransactionType) {
+  public async delete(data: DeleteTagsDataSchemaInfer, tx?: TransactionType) {
     return this.client
       .get(tx)
       .delete(tagsTable)
@@ -32,7 +31,7 @@ export class TagsService extends BaseService {
   }
 
   public async attachToModule(
-    data: AttachTagsToModuleSchemaInfer,
+    data: AttachTagsToModuleDataSchemaInfer,
     tx?: TransactionType,
   ) {
     return this.client
@@ -42,7 +41,7 @@ export class TagsService extends BaseService {
   }
 
   public async createWithAttach(
-    data: CreateTagsWithAttachSchemaInfer,
+    data: CreateTagsWithAttachDataSchemaInfer,
     tx?: TransactionType,
   ) {
     const newTags: TagSchemaInfer[] = [];
@@ -70,16 +69,18 @@ export class TagsService extends BaseService {
     return newTags;
   }
 
-  public async getUserTags(data: GetUserTagsSchemaInfer) {
-    return this.client.db.query.tagsTable.findMany({
-      where: (tag, { eq }) => eq(tag.userId, data.userId),
+  public async getUserTags(data: IdSchemaInfer) {
+    const userTags = await this.client.db.query.tagsTable.findMany({
+      where: (tag, { eq }) => eq(tag.userId, data.id),
     });
+
+    return userTags.map((tag) => tagToModuleFormat(tag));
   }
 
-  public async getModuleTags(data: GetModuleTagsSchemaInfer) {
+  public async getModuleTags(data: IdSchemaInfer) {
     const tagsId = (
       await this.client.db.query.modulesToTagsTable.findMany({
-        where: (pair, { eq }) => eq(pair.moduleId, data.moduleId),
+        where: (pair, { eq }) => eq(pair.moduleId, data.id),
       })
     ).map((pair) => pair.tagId);
 
@@ -88,8 +89,8 @@ export class TagsService extends BaseService {
     });
   }
 
-  public async getNotAttachedUserTags(data: GetNotAttachedUserTagsInfer) {
-    const userTags = await this.getUserTags(data);
+  public async getNotAttachedUserTags(data: GetNotAttachedTagsDataInfer) {
+    const userTags = await this.getUserTags({ id: data.userId });
 
     const attachedTagsPairs =
       await this.client.db.query.modulesToTagsTable.findMany({

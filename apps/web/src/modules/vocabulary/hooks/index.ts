@@ -1,3 +1,4 @@
+export * from "./use-module-form";
 export * from "./use-tags-input";
 export * from "./use-user-tags";
 export * from "./use-user-tags-context";

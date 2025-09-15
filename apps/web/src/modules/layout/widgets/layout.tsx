@@ -5,8 +5,7 @@ import Link from "next/link";
 
 import { APP_PATHS } from "@/modules/routing";
 
-import { DynamicLayout } from "./dynamic-layout";
-import { HeaderAuthGroup } from "./header-auth-group";
+import { DynamicLayout, HeaderAuthGroup } from "../ui";
 
 interface LayoutProps {
   children?: ReactNode;

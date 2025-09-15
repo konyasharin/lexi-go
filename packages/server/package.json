@@ -28,6 +28,7 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
+    "@repo/entities": "workspace:*",
     "@trpc/server": "^11.4.3",
     "axios": "^1.11.0",
     "cookie": "^1.0.2",

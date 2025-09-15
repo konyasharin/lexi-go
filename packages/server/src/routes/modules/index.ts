@@ -1,7 +1,9 @@
+import { createModuleInputSchema } from "@repo/entities/module";
+import { idSchema } from "@repo/entities/shared";
+
 import { createRequest } from "@/utils";
 
 import { ModulesController } from "./modules.controller";
-import { createModuleInputSchema, deleteModuleSchema } from "./modules.schemas";
 
 import { publicProcedure, router } from "@/trpc";
 
@@ -12,7 +14,7 @@ export const modulesRouter = router({
       async (opts) => await new ModulesController().create(createRequest(opts)),
     ),
   delete: publicProcedure
-    .input(deleteModuleSchema)
+    .input(idSchema)
     .mutation(
       async (opts) => await new ModulesController().delete(createRequest(opts)),
     ),

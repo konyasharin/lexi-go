@@ -11,6 +11,6 @@ export class TagsController extends BaseController {
   @auth
   public async getUserTags(req: Request) {
     const user = getUserPublic(req.headers);
-    return this._tagsService.getUserTags({ userId: user.id });
+    return this._tagsService.getUserTags({ id: user.id });
   }
 }

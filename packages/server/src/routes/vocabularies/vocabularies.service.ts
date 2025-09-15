@@ -1,3 +1,10 @@
+import { IdSchemaInfer } from "@repo/entities/shared";
+import {
+  AttachVocabulariesToModuleDataSchemaInfer,
+  CreateVocabulariesDataSchemaInfer,
+  CreateVocabulariesWithAttachDataSchemaInfer,
+  DeleteVocabulariesDataSchemaInfer,
+} from "@repo/entities/vocabulary";
 import { inArray } from "drizzle-orm";
 
 import { BaseService } from "@/utils";
@@ -8,17 +15,9 @@ import {
   vocabulariesTable,
 } from "@/db";
 
-import {
-  AttachVocabulariesToModuleSchemaInfer,
-  CreateVocabulariesSchemaInfer,
-  CreateVocabulariesWithAttachSchemaInfer,
-  DeleteVocabulariesSchemaInfer,
-  GetModuleVocabulariesSchemaInfer,
-} from "./vocabularies.schemas";
-
 export class VocabulariesService extends BaseService {
   public async create(
-    data: CreateVocabulariesSchemaInfer,
+    data: CreateVocabulariesDataSchemaInfer,
     tx?: TransactionType,
   ) {
     return this.client
@@ -29,7 +28,7 @@ export class VocabulariesService extends BaseService {
   }
 
   public async delete(
-    data: DeleteVocabulariesSchemaInfer,
+    data: DeleteVocabulariesDataSchemaInfer,
     tx?: TransactionType,
   ) {
     return this.client
@@ -39,7 +38,7 @@ export class VocabulariesService extends BaseService {
   }
 
   public async attachToModule(
-    data: AttachVocabulariesToModuleSchemaInfer,
+    data: AttachVocabulariesToModuleDataSchemaInfer,
     tx?: TransactionType,
   ) {
     return this.client
@@ -54,7 +53,7 @@ export class VocabulariesService extends BaseService {
   }
 
   public async createWithAttach(
-    data: CreateVocabulariesWithAttachSchemaInfer,
+    data: CreateVocabulariesWithAttachDataSchemaInfer,
     tx?: TransactionType,
   ) {
     const newVocabularies = await this.create(data.vocabularies, tx);
@@ -69,10 +68,10 @@ export class VocabulariesService extends BaseService {
     return newVocabularies;
   }
 
-  public async getModuleVocabularies(data: GetModuleVocabulariesSchemaInfer) {
+  public async getModuleVocabularies(data: IdSchemaInfer) {
     const vocabulariesId = (
       await this.client.db.query.modulesToVocabulariesTable.findMany({
-        where: (pair, { eq }) => eq(pair.moduleId, data.moduleId),
+        where: (pair, { eq }) => eq(pair.moduleId, data.id),
       })
     ).map((pair) => pair.vocabularyId);
 

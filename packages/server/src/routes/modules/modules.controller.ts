@@ -1,6 +1,12 @@
 import { Request } from "@/types";
 
 import {
+  CreateModuleInputSchemaInfer,
+  CreateModuleResponseSchemaInfer,
+} from "@repo/entities/module";
+import { IdSchemaInfer } from "@repo/entities/shared";
+
+import {
   auth,
   BaseController,
   controllerMethod,
@@ -14,11 +20,6 @@ import {
 import { TagsService } from "../tags";
 import { VocabulariesService } from "../vocabularies";
 
-import {
-  CreateModuleInputSchemaInfer,
-  CreateModuleResponseSchemaInfer,
-  DeleteModuleSchemaInfer,
-} from "./modules.schemas";
 import { ModulesService } from "./modules.service";
 
 export class ModulesController extends BaseController {
@@ -66,7 +67,7 @@ export class ModulesController extends BaseController {
 
   @controllerMethod
   @auth
-  public async delete(req: Request<DeleteModuleSchemaInfer>) {
+  public async delete(req: Request<IdSchemaInfer>) {
     const user = getUserPublic(req.headers);
     const module = await this._modulesService.getById({
       id: req.data.id,

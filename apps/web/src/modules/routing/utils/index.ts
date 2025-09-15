@@ -1,2 +1,2 @@
-export * from "./getMiddlewareRedirectUrl";
-export * from "./isPathnameMatchAnyRoute";
+export * from "./get-middleware-redirect-url";
+export * from "./is-pathname-match-any-route";

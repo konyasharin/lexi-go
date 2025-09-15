@@ -1,28 +1,25 @@
+import {
+  CreateModuleDataSchemaInfer,
+  GetModuleFullDataSchemaInfer,
+  GetUserOwnedModulesDataSchemaInfer,
+  IsMyModuleDataSchemaInfer,
+} from "@repo/entities/module";
+import { IdSchemaInfer } from "@repo/entities/shared";
+import { tagToModuleFormat } from "@repo/entities/tag";
 import { eq } from "drizzle-orm";
 
 import { BaseService } from "@/utils";
 
 import { modulesTable, TransactionType } from "@/db";
-import { TagsTransformer } from "@/routes/tags/tags.transformer";
 
 import { TagsService } from "../tags";
 import { VocabulariesService } from "../vocabularies";
-
-import {
-  ConnectAdditionalInfoSchemaInfer,
-  CreateModuleSchemaInfer,
-  DeleteModuleSchemaInfer,
-  GetModuleByIdSchemaInfer,
-  GetUserOwnedSchemaInfer,
-  IsMyModuleSchemaInfer,
-  ModuleSchemaInfer,
-} from "./modules.schemas";
 
 export class ModulesService extends BaseService {
   private _vocabulariesService = new VocabulariesService();
   private _tagsService = new TagsService();
 
-  public async create(data: CreateModuleSchemaInfer, tx?: TransactionType) {
+  public async create(data: CreateModuleDataSchemaInfer, tx?: TransactionType) {
     const newModuleId = await this.client
       .get(tx)
       .insert(modulesTable)
@@ -36,14 +33,14 @@ export class ModulesService extends BaseService {
     return newModuleId[0]?.id;
   }
 
-  public async delete(data: DeleteModuleSchemaInfer, tx?: TransactionType) {
+  public async delete(data: IdSchemaInfer, tx?: TransactionType) {
     await this.client
       .get(tx)
       .delete(modulesTable)
       .where(eq(modulesTable.id, data.id));
   }
 
-  public async getUserOwned(data: GetUserOwnedSchemaInfer) {
+  public async getUserOwned(data: GetUserOwnedModulesDataSchemaInfer) {
     const userModules = await this.client.db.query.modulesTable.findMany({
       where: (module, { eq }) => eq(module.id, data.userId),
     });
@@ -66,26 +63,26 @@ export class ModulesService extends BaseService {
     );
   }
 
-  public async getById(data: GetModuleByIdSchemaInfer) {
+  public async getById(data: IdSchemaInfer) {
     return this.client.db.query.modulesTable.findFirst({
       where: (module, { eq }) => eq(module.id, data.id),
     });
   }
 
-  public async connectAdditionalInfo(data: ConnectAdditionalInfoSchemaInfer) {
-    const tags = await this._tagsService.getModuleTags({ moduleId: data.id });
+  public async connectAdditionalInfo(data: GetModuleFullDataSchemaInfer) {
+    const tags = await this._tagsService.getModuleTags({ id: data.id });
     const vocabularies = await this._vocabulariesService.getModuleVocabularies({
-      moduleId: data.id,
+      id: data.id,
     });
 
     return {
       ...data,
-      tags: tags.map((tag) => TagsTransformer.toModuleFormat(tag)),
+      tags: tags.map((tag) => tagToModuleFormat(tag)),
       vocabularies,
     };
   }
 
-  public async isMy(data: IsMyModuleSchemaInfer) {
+  public async isMy(data: IsMyModuleDataSchemaInfer) {
     const module = await this.getById({ id: data.moduleId });
     if (!module) return false;
 

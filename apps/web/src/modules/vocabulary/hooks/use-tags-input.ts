@@ -1,14 +1,14 @@
 import { useMemo, useState } from "react";
-import { CreateTagsWithAttachSchemaInfer } from "@repo/server/types";
+import { CreateTagsWithAttachDataSchemaInfer } from "@repo/entities/tag";
 
 import { autoId } from "@/shared/utils";
 
 export const useTagsInput = () => {
   const [newTags, setNewTags] = useState<
-    CreateTagsWithAttachSchemaInfer["newTags"]
+    CreateTagsWithAttachDataSchemaInfer["newTags"]
   >([]);
   const [userTags, setUserTags] = useState<
-    CreateTagsWithAttachSchemaInfer["userTags"]
+    CreateTagsWithAttachDataSchemaInfer["userTags"]
   >([]);
 
   const visualTags = useMemo(() => {
